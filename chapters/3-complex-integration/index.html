@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 3 — Complex Integration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <button class="hamburger" aria-label="Open navigation" aria-expanded="false">☰</button>
+    <div class="overlay" aria-hidden="true"></div>
+    <nav class="sidebar" aria-label="Main navigation">
+        <div class="sidebar-brand"><h1>Complex Analysis</h1><div class="subtitle">Interactive Visualizations</div></div>
+        <div class="sidebar-nav" role="list"></div>
+        <div class="sidebar-footer">© 2026 · MIT License</div>
+    </nav>
+
+    <main class="main-content" id="main">
+        <div class="page-container">
+            <div class="breadcrumb">
+                <a href="../../index.html">Home</a><span class="sep">/</span><span>Chapter 3</span>
+            </div>
+
+            <div class="chapter-header">
+                <div class="chapter-label">Chapter 3</div>
+                <h1>Complex Integration</h1>
+                <p class="chapter-desc">
+                    Integration in the complex plane is profoundly different from real integration.
+                    The path matters — unless the function is analytic, in which case Cauchy's theorem
+                    grants extraordinary freedom.
+                </p>
+            </div>
+
+            <h2>3.1 Contour Integrals</h2>
+
+            <div class="definition">
+                <p>Let $\gamma: [a,b] \to \mathbb{C}$ be a smooth curve and $f$ continuous on $\gamma$.
+                The <strong>contour integral</strong> of $f$ along $\gamma$ is
+                $$\int_\gamma f(z)\,dz = \int_a^b f(\gamma(t))\,\gamma'(t)\,dt$$</p>
+            </div>
+
+            <p>Key properties: linearity, reversal of orientation negates the integral,
+            and the ML inequality gives an upper bound:</p>
+            <div class="math-block">
+                $$\left|\int_\gamma f(z)\,dz\right| \le M \cdot L(\gamma)$$
+                where $M = \max_{z \in \gamma}|f(z)|$ and $L(\gamma)$ is the arc length.
+            </div>
+
+            <h2>3.2 Cauchy–Goursat Theorem</h2>
+
+            <div class="theorem">
+                <p><strong>(Cauchy–Goursat)</strong> If $f$ is analytic on and inside a simple closed
+                contour $\gamma$, then
+                $$\oint_\gamma f(z)\,dz = 0$$</p>
+            </div>
+
+            <p>This is one of the most important results in all of mathematics. It says that for
+            analytic functions, closed contour integrals vanish — the integral depends only on
+            the endpoints, not the path.</p>
+
+            <!-- ═══ SIM 1: Contour Integral Visualizer ═══ -->
+            <div class="sim-card">
+                <div class="sim-card-header">
+                    <h3>Contour Integral Visualizer</h3>
+                    <span class="sim-badge">Animated</span>
+                </div>
+                <div class="sim-canvas-wrap">
+                    <canvas id="contourSim" width="800" height="600" aria-label="Contour integral visualization — watch a point traverse a circular contour while accumulating the integral value"></canvas>
+                </div>
+                <div class="sim-readout" id="contourReadout">
+                    <div class="readout-item"><span class="readout-label">f(z) =</span><span class="readout-value" id="contourFunc">1/z</span></div>
+                    <div class="readout-item"><span class="readout-label">∮ f dz =</span><span class="readout-value" id="contourVal">—</span></div>
+                    <div class="readout-item"><span class="readout-label">t =</span><span class="readout-value" id="contourT">0</span></div>
+                </div>
+                <div class="sim-controls">
+                    <button class="btn" id="contourPlay" aria-label="Play or pause animation">▶ Play</button>
+                    <button class="btn" id="contourReset" aria-label="Reset contour integral">↺ Reset</button>
+                    <div class="control-group">
+                        <label for="contourFuncSel">f(z) =</label>
+                        <select id="contourFuncSel" aria-label="Select integrand">
+                            <option value="1/z">1/z (result: 2πi)</option>
+                            <option value="1/z^2">1/z² (result: 0)</option>
+                            <option value="z">z (analytic, result: 0)</option>
+                            <option value="z^2">z² (analytic, result: 0)</option>
+                            <option value="exp(z)">exp(z) (analytic, result: 0)</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="contourR">Radius:</label>
+                        <input type="range" id="contourR" min="0.3" max="2.5" step="0.1" value="1" aria-label="Contour radius">
+                        <span id="contourRVal" style="font-family:var(--font-code);font-size:0.82rem;color:var(--gold);min-width:30px;">1.0</span>
+                    </div>
+                </div>
+                <details class="sim-info">
+                    <summary>ℹ What to observe</summary>
+                    <div class="info-content">
+                        <p>A point traverses a circular contour around the origin. The running integral
+                        $\int_0^t f(\gamma(s))\gamma'(s)\,ds$ is shown as a red curve in the bottom-right
+                        inset. For $1/z$, the integral accumulates to $2\pi i$ — the residue theorem in action.
+                        For analytic functions like $z^2$ or $e^z$, the integral returns to $0$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <h2>3.3 Cauchy Integral Formula</h2>
+
+            <div class="theorem">
+                <p><strong>(Cauchy Integral Formula)</strong> If $f$ is analytic inside and on a simple
+                closed contour $\gamma$, and $z_0$ is inside $\gamma$, then
+                $$f(z_0) = \frac{1}{2\pi i} \oint_\gamma \frac{f(z)}{z - z_0}\,dz$$
+                Moreover, the derivatives satisfy
+                $$f^{(n)}(z_0) = \frac{n!}{2\pi i} \oint_\gamma \frac{f(z)}{(z - z_0)^{n+1}}\,dz$$</p>
+            </div>
+
+            <p>This remarkable formula says an analytic function's value at any interior point is completely
+            determined by its values on the boundary. It also proves that analytic functions are infinitely
+            differentiable.</p>
+
+            <h2>3.4 Winding Numbers</h2>
+
+            <div class="definition">
+                <p>The <strong>winding number</strong> (or index) of a closed curve $\gamma$ about a
+                point $z_0 \notin \gamma$ is
+                $$n(\gamma, z_0) = \frac{1}{2\pi i} \oint_\gamma \frac{dz}{z - z_0} \in \mathbb{Z}$$
+                It counts the number of times $\gamma$ winds around $z_0$ counter-clockwise.</p>
+            </div>
+
+            <!-- ═══ SIM 2: Winding Number ═══ -->
+            <div class="sim-card">
+                <div class="sim-card-header">
+                    <h3>Winding Number Calculator</h3>
+                    <span class="sim-badge">Draw</span>
+                </div>
+                <div class="sim-canvas-wrap">
+                    <canvas id="windingSim" width="800" height="600" aria-label="Winding number calculator — draw a closed curve then click a point to compute the winding number"></canvas>
+                </div>
+                <div class="sim-readout">
+                    <div class="readout-item"><span class="readout-label">Mode:</span><span class="readout-value" id="windingMode">Draw curve</span></div>
+                    <div class="readout-item"><span class="readout-label">n(γ, z₀) =</span><span class="readout-value" id="windingN">—</span></div>
+                    <div class="readout-item"><span class="readout-label">z₀ =</span><span class="readout-value" id="windingZ0">—</span></div>
+                </div>
+                <div class="sim-controls">
+                    <button class="btn" id="windingClear" aria-label="Clear drawing">↺ Clear</button>
+                    <button class="btn btn-accent" id="windingCircle" aria-label="Draw a preset circle">○ Preset Circle</button>
+                    <button class="btn btn-accent" id="windingFigure8" aria-label="Draw a preset figure eight">∞ Figure-8</button>
+                </div>
+                <details class="sim-info">
+                    <summary>ℹ What to observe</summary>
+                    <div class="info-content">
+                        <p>Draw a closed curve by clicking/dragging on the canvas (release to close it).
+                        Then click any point to compute the winding number. The winding number is +1 for
+                        each counter-clockwise loop around the point, -1 for clockwise. Points outside
+                        the curve have winding number 0. Try the figure-8: interior regions have different
+                        winding numbers!</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="section-divider"></div>
+            <h2>Key Takeaways</h2>
+            <div class="key-concepts">
+                <div class="key-concept">
+                    <h4>Cauchy–Goursat</h4>
+                    <p>$\oint_\gamma f\,dz = 0$ for analytic $f$ on simply connected domains.</p>
+                </div>
+                <div class="key-concept">
+                    <h4>Integral Formula</h4>
+                    <p>Boundary values of $f$ determine interior values — and all derivatives.</p>
+                </div>
+                <div class="key-concept">
+                    <h4>Winding Numbers</h4>
+                    <p>$n(\gamma,z_0) = \frac{1}{2\pi i}\oint \frac{dz}{z-z_0}$ counts loops around $z_0$.</p>
+                </div>
+                <div class="key-concept">
+                    <h4>ML Inequality</h4>
+                    <p>$|\int_\gamma f\,dz| \le M \cdot L$ — a universal bound on contour integrals.</p>
+                </div>
+            </div>
+
+            <footer class="page-footer">
+                <p>Complex Analysis — Interactive Visualizations · <a href="../../LICENSE">MIT License</a> · 2026</p>
+            </footer>
+        </div>
+    </main>
+
+    <script src="../../assets/js/utils/complex-math.js"></script>
+    <script src="../../assets/js/utils/rk4.js"></script>
+    <script src="../../assets/js/nav.js"></script>
+
+    <script>
+    function getFunc3(val) {
+        switch(val) {
+            case '1/z': return z => Complex.one().div(z);
+            case '1/z^2': return z => Complex.one().div(z.mul(z));
+            case 'z': return z => z.clone();
+            case 'z^2': return z => z.mul(z);
+            case 'exp(z)': return z => z.exp();
+            default: return z => Complex.one().div(z);
+        }
+    }
+
+    /* ══════════════════════ SIM 1: Contour Integral ══════════════════════ */
+    (function() {
+        const canvas = document.getElementById('contourSim');
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width, H = canvas.height;
+        const xRange = [-3.5, 3.5], yRange = [-2.5, 2.5];
+
+        let func = getFunc3('1/z');
+        let radius = 1;
+        let t = 0;
+        let playing = false;
+        let animId, lastTime = 0;
+        let integralPath = [];
+
+        function toScreen(z) {
+            return {
+                x: (z.re - xRange[0]) / (xRange[1] - xRange[0]) * W,
+                y: H - (z.im - yRange[0]) / (yRange[1] - yRange[0]) * H
+            };
+        }
+
+        function computeIntegral(tMax) {
+            const N = Math.max(10, Math.floor(tMax * 200));
+            let sum = Complex.zero();
+            const path = [{ t: 0, val: Complex.zero() }];
+            for (let i = 0; i < N; i++) {
+                const ti = (i / N) * tMax * 2 * Math.PI;
+                const dt = (tMax * 2 * Math.PI) / N;
+                const z = Complex.fromPolar(radius, ti);
+                const dz = new Complex(-radius * Math.sin(ti), radius * Math.cos(ti)).mul(dt);
+                let fz;
+                try { fz = func(z); } catch(e) { fz = Complex.zero(); }
+                sum = sum.add(fz.mul(dz));
+                path.push({ t: (i + 1) / N, val: sum.clone() });
+            }
+            return { sum, path };
+        }
+
+        function draw(timestamp) {
+            if (playing) {
+                const dt = lastTime ? (timestamp - lastTime) / 1000 : 0;
+                lastTime = timestamp;
+                t = Math.min(1, t + dt * 0.25);
+            }
+
+            ctx.fillStyle = '#050510';
+            ctx.fillRect(0, 0, W, H);
+
+            /* Grid */
+            ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+            ctx.lineWidth = 1;
+            for (let x = Math.ceil(xRange[0]); x <= xRange[1]; x++) {
+                const sx = (x - xRange[0]) / (xRange[1] - xRange[0]) * W;
+                ctx.beginPath(); ctx.moveTo(sx, 0); ctx.lineTo(sx, H); ctx.stroke();
+            }
+            for (let y = Math.ceil(yRange[0]); y <= yRange[1]; y++) {
+                const sy = H - (y - yRange[0]) / (yRange[1] - yRange[0]) * H;
+                ctx.beginPath(); ctx.moveTo(0, sy); ctx.lineTo(W, sy); ctx.stroke();
+            }
+
+            /* Axes */
+            ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+            ctx.lineWidth = 1.5;
+            const ox = (-xRange[0]) / (xRange[1] - xRange[0]) * W;
+            const oy = H - (-yRange[0]) / (yRange[1] - yRange[0]) * H;
+            ctx.beginPath(); ctx.moveTo(ox, 0); ctx.lineTo(ox, H); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(W, oy); ctx.stroke();
+
+            /* Contour circle */
+            const center = toScreen(Complex.zero());
+            const edge = toScreen(new Complex(radius, 0));
+            const screenR = edge.x - center.x;
+            ctx.beginPath();
+            ctx.arc(center.x, center.y, screenR, 0, 2 * Math.PI);
+            ctx.strokeStyle = 'rgba(124, 108, 240, 0.4)';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([6, 4]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            /* Traced path */
+            const arcEnd = t * 2 * Math.PI;
+            ctx.beginPath();
+            ctx.arc(center.x, center.y, screenR, -arcEnd, 0);
+            ctx.strokeStyle = '#7c6cf0';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            /* Moving point */
+            const zCurrent = Complex.fromPolar(radius, arcEnd);
+            const pCurr = toScreen(zCurrent);
+            ctx.beginPath();
+            ctx.arc(pCurr.x, pCurr.y, 6, 0, 2 * Math.PI);
+            ctx.fillStyle = '#f0c040';
+            ctx.fill();
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            /* Origin marker */
+            ctx.beginPath();
+            ctx.arc(center.x, center.y, 3, 0, 2 * Math.PI);
+            ctx.fillStyle = '#e94560';
+            ctx.fill();
+
+            /* Compute running integral */
+            const result = computeIntegral(t);
+            integralPath = result.path;
+
+            /* Draw integral value inset (bottom-right) */
+            const insetX = W - 220, insetY = H - 170, insetW = 200, insetH = 150;
+            ctx.fillStyle = 'rgba(16, 16, 40, 0.9)';
+            ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+            ctx.lineWidth = 1;
+            ctx.fillRect(insetX, insetY, insetW, insetH);
+            ctx.strokeRect(insetX, insetY, insetW, insetH);
+
+            ctx.fillStyle = 'rgba(255,255,255,0.5)';
+            ctx.font = '11px JetBrains Mono, monospace';
+            ctx.fillText('Integral path (Re, Im)', insetX + 8, insetY + 14);
+
+            /* Axes in inset */
+            const icx = insetX + insetW / 2, icy = insetY + insetH / 2 + 10;
+            ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+            ctx.beginPath(); ctx.moveTo(insetX + 10, icy); ctx.lineTo(insetX + insetW - 10, icy); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(icx, insetY + 20); ctx.lineTo(icx, insetY + insetH - 10); ctx.stroke();
+
+            /* Find scale */
+            let maxVal = 1;
+            for (const pt of integralPath) {
+                maxVal = Math.max(maxVal, Math.abs(pt.val.re), Math.abs(pt.val.im));
+            }
+            const iScale = (insetW / 2 - 20) / maxVal;
+
+            /* Plot */
+            if (integralPath.length > 1) {
+                ctx.beginPath();
+                ctx.strokeStyle = '#e94560';
+                ctx.lineWidth = 2;
+                for (let i = 0; i < integralPath.length; i++) {
+                    const px = icx + integralPath[i].val.re * iScale;
+                    const py = icy - integralPath[i].val.im * iScale;
+                    if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+                }
+                ctx.stroke();
+
+                /* Current point */
+                const last = integralPath[integralPath.length - 1];
+                const lpx = icx + last.val.re * iScale;
+                const lpy = icy - last.val.im * iScale;
+                ctx.beginPath();
+                ctx.arc(lpx, lpy, 4, 0, 2 * Math.PI);
+                ctx.fillStyle = '#f0c040';
+                ctx.fill();
+            }
+
+            /* Update readouts */
+            document.getElementById('contourVal').textContent = result.sum.toString(3);
+            document.getElementById('contourT').textContent = t.toFixed(2);
+
+            if (playing && t < 1) {
+                animId = requestAnimationFrame(draw);
+            } else if (playing && t >= 1) {
+                playing = false;
+                document.getElementById('contourPlay').textContent = '▶ Play';
+            }
+        }
+
+        document.getElementById('contourPlay').addEventListener('click', () => {
+            playing = !playing;
+            document.getElementById('contourPlay').textContent = playing ? '⏸ Pause' : '▶ Play';
+            if (playing) {
+                if (t >= 1) t = 0;
+                lastTime = 0;
+                animId = requestAnimationFrame(draw);
+            }
+        });
+
+        document.getElementById('contourReset').addEventListener('click', () => {
+            playing = false;
+            document.getElementById('contourPlay').textContent = '▶ Play';
+            cancelAnimationFrame(animId);
+            t = 0; lastTime = 0;
+            requestAnimationFrame(draw);
+        });
+
+        document.getElementById('contourFuncSel').addEventListener('change', e => {
+            func = getFunc3(e.target.value);
+            document.getElementById('contourFunc').textContent = e.target.options[e.target.selectedIndex].text;
+            t = 0;
+            requestAnimationFrame(draw);
+        });
+
+        document.getElementById('contourR').addEventListener('input', e => {
+            radius = parseFloat(e.target.value);
+            document.getElementById('contourRVal').textContent = radius.toFixed(1);
+            requestAnimationFrame(draw);
+        });
+
+        requestAnimationFrame(draw);
+    })();
+
+    /* ══════════════════════ SIM 2: Winding Number ══════════════════════ */
+    (function() {
+        const canvas = document.getElementById('windingSim');
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width, H = canvas.height;
+        const xRange = [-3.5, 3.5], yRange = [-2.5, 2.5];
+
+        let curve = [];
+        let drawing = false;
+        let curveComplete = false;
+        let testPoint = null;
+        let windingNumber = null;
+
+        function toScreen(z) {
+            return {
+                x: (z.re - xRange[0]) / (xRange[1] - xRange[0]) * W,
+                y: H - (z.im - yRange[0]) / (yRange[1] - yRange[0]) * H
+            };
+        }
+        function toComplex(sx, sy) {
+            return new Complex(
+                xRange[0] + (sx / W) * (xRange[1] - xRange[0]),
+                yRange[1] - (sy / H) * (yRange[1] - yRange[0])
+            );
+        }
+
+        function getCanvasPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = W / rect.width, scaleY = H / rect.height;
+            if (e.touches) {
+                return { x: (e.touches[0].clientX - rect.left) * scaleX, y: (e.touches[0].clientY - rect.top) * scaleY };
+            }
+            return { x: (e.clientX - rect.left) * scaleX, y: (e.clientY - rect.top) * scaleY };
+        }
+
+        function computeWinding(point, curvePts) {
+            let angle = 0;
+            for (let i = 0; i < curvePts.length; i++) {
+                const a = curvePts[i];
+                const b = curvePts[(i + 1) % curvePts.length];
+                const da = Math.atan2(a.im - point.im, a.re - point.re);
+                const db = Math.atan2(b.im - point.im, b.re - point.re);
+                let diff = db - da;
+                if (diff > Math.PI) diff -= 2 * Math.PI;
+                if (diff < -Math.PI) diff += 2 * Math.PI;
+                angle += diff;
+            }
+            return Math.round(angle / (2 * Math.PI));
+        }
+
+        function draw() {
+            ctx.fillStyle = '#050510';
+            ctx.fillRect(0, 0, W, H);
+
+            /* Grid */
+            ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+            ctx.lineWidth = 1;
+            for (let x = Math.ceil(xRange[0]); x <= xRange[1]; x++) {
+                const sx = (x - xRange[0]) / (xRange[1] - xRange[0]) * W;
+                ctx.beginPath(); ctx.moveTo(sx, 0); ctx.lineTo(sx, H); ctx.stroke();
+            }
+            for (let y = Math.ceil(yRange[0]); y <= yRange[1]; y++) {
+                const sy = H - (y - yRange[0]) / (yRange[1] - yRange[0]) * H;
+                ctx.beginPath(); ctx.moveTo(0, sy); ctx.lineTo(W, sy); ctx.stroke();
+            }
+
+            /* Curve */
+            if (curve.length > 1) {
+                ctx.beginPath();
+                const p0 = toScreen(curve[0]);
+                ctx.moveTo(p0.x, p0.y);
+                for (let i = 1; i < curve.length; i++) {
+                    const p = toScreen(curve[i]);
+                    ctx.lineTo(p.x, p.y);
+                }
+                if (curveComplete) ctx.closePath();
+                ctx.strokeStyle = '#7c6cf0';
+                ctx.lineWidth = 2.5;
+                ctx.stroke();
+
+                /* Direction arrows */
+                if (curve.length > 10) {
+                    for (let i = 0; i < curve.length - 1; i += Math.max(1, Math.floor(curve.length / 8))) {
+                        const a = toScreen(curve[i]);
+                        const b = toScreen(curve[Math.min(i + 3, curve.length - 1)]);
+                        const angle = Math.atan2(b.y - a.y, b.x - a.x);
+                        const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+                        ctx.save();
+                        ctx.fillStyle = '#a89cff';
+                        ctx.beginPath();
+                        ctx.moveTo(mx + 6 * Math.cos(angle), my + 6 * Math.sin(angle));
+                        ctx.lineTo(mx - 4 * Math.cos(angle - 0.6), my - 4 * Math.sin(angle - 0.6));
+                        ctx.lineTo(mx - 4 * Math.cos(angle + 0.6), my - 4 * Math.sin(angle + 0.6));
+                        ctx.closePath();
+                        ctx.fill();
+                        ctx.restore();
+                    }
+                }
+            }
+
+            /* Test point */
+            if (testPoint) {
+                const tp = toScreen(testPoint);
+                ctx.beginPath();
+                ctx.arc(tp.x, tp.y, 7, 0, 2 * Math.PI);
+                ctx.fillStyle = '#f0c040';
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                if (windingNumber !== null) {
+                    ctx.font = 'bold 16px JetBrains Mono, monospace';
+                    ctx.fillStyle = windingNumber === 0 ? '#666' : '#f0c040';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(`n = ${windingNumber}`, tp.x, tp.y - 14);
+                }
+            }
+
+            /* Instructions */
+            if (curve.length === 0) {
+                ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                ctx.font = '14px Lora, serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('Click and drag to draw a closed curve', W / 2, H / 2);
+            } else if (curveComplete && !testPoint) {
+                ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                ctx.font = '14px Lora, serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('Click a point to compute winding number', W / 2, H - 20);
+            }
+        }
+
+        canvas.addEventListener('pointerdown', e => {
+            e.preventDefault();
+            const pos = getCanvasPos(e);
+            const z = toComplex(pos.x, pos.y);
+
+            if (curveComplete) {
+                testPoint = z;
+                windingNumber = computeWinding(z, curve);
+                document.getElementById('windingN').textContent = windingNumber;
+                document.getElementById('windingZ0').textContent = z.toString(2);
+                document.getElementById('windingMode').textContent = 'Click to test';
+                draw();
+                return;
+            }
+
+            drawing = true;
+            curve = [z];
+            document.getElementById('windingMode').textContent = 'Drawing...';
+        });
+
+        canvas.addEventListener('pointermove', e => {
+            if (!drawing) return;
+            e.preventDefault();
+            const pos = getCanvasPos(e);
+            const z = toComplex(pos.x, pos.y);
+            if (curve.length === 0 || z.dist(curve[curve.length - 1]) > 0.05) {
+                curve.push(z);
+            }
+            draw();
+        });
+
+        canvas.addEventListener('pointerup', () => {
+            if (drawing && curve.length > 5) {
+                curveComplete = true;
+                document.getElementById('windingMode').textContent = 'Click to test point';
+            }
+            drawing = false;
+            draw();
+        });
+
+        function setPresetCurve(points) {
+            curve = points;
+            curveComplete = true;
+            testPoint = null;
+            windingNumber = null;
+            document.getElementById('windingMode').textContent = 'Click to test point';
+            document.getElementById('windingN').textContent = '—';
+            document.getElementById('windingZ0').textContent = '—';
+            draw();
+        }
+
+        document.getElementById('windingCircle').addEventListener('click', () => {
+            const pts = [];
+            for (let i = 0; i <= 100; i++) {
+                const angle = (i / 100) * 2 * Math.PI;
+                pts.push(Complex.fromPolar(1.5, angle));
+            }
+            setPresetCurve(pts);
+        });
+
+        document.getElementById('windingFigure8').addEventListener('click', () => {
+            const pts = [];
+            for (let i = 0; i <= 200; i++) {
+                const t = (i / 200) * 2 * Math.PI;
+                const x = 1.5 * Math.sin(t);
+                const y = 1.0 * Math.sin(2 * t);
+                pts.push(new Complex(x, y));
+            }
+            setPresetCurve(pts);
+        });
+
+        document.getElementById('windingClear').addEventListener('click', () => {
+            curve = [];
+            curveComplete = false;
+            testPoint = null;
+            windingNumber = null;
+            document.getElementById('windingMode').textContent = 'Draw curve';
+            document.getElementById('windingN').textContent = '—';
+            document.getElementById('windingZ0').textContent = '—';
+            draw();
+        });
+
+        draw();
+    })();
+    </script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false},
+                {left: "\\[", right: "\\]", display: true},
+                {left: "\\(", right: "\\)", display: false}
+            ]
+        });
+    });
+    </script>
+</body>
+</html>

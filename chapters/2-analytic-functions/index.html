@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 2 — Analytic Functions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <button class="hamburger" aria-label="Open navigation" aria-expanded="false">☰</button>
+    <div class="overlay" aria-hidden="true"></div>
+    <nav class="sidebar" aria-label="Main navigation">
+        <div class="sidebar-brand"><h1>Complex Analysis</h1><div class="subtitle">Interactive Visualizations</div></div>
+        <div class="sidebar-nav" role="list"></div>
+        <div class="sidebar-footer">© 2026 · MIT License</div>
+    </nav>
+
+    <main class="main-content" id="main">
+        <div class="page-container">
+            <div class="breadcrumb">
+                <a href="../../index.html">Home</a><span class="sep">/</span><span>Chapter 2</span>
+            </div>
+
+            <div class="chapter-header">
+                <div class="chapter-label">Chapter 2</div>
+                <h1>Analytic Functions</h1>
+                <p class="chapter-desc">
+                    The derivative of a complex function is far more restrictive than its real counterpart.
+                    Functions that are complex-differentiable — analytic functions — satisfy the Cauchy–Riemann
+                    equations and possess extraordinary properties.
+                </p>
+            </div>
+
+            <h2>2.1 Complex Differentiability</h2>
+
+            <div class="definition">
+                <p>A function $f: U \to \mathbb{C}$ is <strong>complex differentiable</strong> (holomorphic)
+                at $z_0 \in U$ if the limit
+                $$f'(z_0) = \lim_{h \to 0} \frac{f(z_0 + h) - f(z_0)}{h}$$
+                exists, where $h \in \mathbb{C}$ may approach $0$ from any direction.</p>
+            </div>
+
+            <p>The key difference from real differentiation: $h$ is complex, so the limit must be the same
+            regardless of the direction of approach. This imposes strong constraints.</p>
+
+            <h2>2.2 Cauchy–Riemann Equations</h2>
+
+            <p>Write $f(z) = u(x,y) + iv(x,y)$ where $z = x + iy$. Then $f$ is analytic if and only if
+            $u$ and $v$ have continuous partial derivatives satisfying:</p>
+
+            <div class="theorem">
+                <p><strong>(Cauchy–Riemann Equations)</strong>
+                $$\frac{\partial u}{\partial x} = \frac{\partial v}{\partial y}, \qquad
+                  \frac{\partial u}{\partial y} = -\frac{\partial v}{\partial x}$$</p>
+            </div>
+
+            <div class="proposition">
+                <p>If $f = u + iv$ is analytic, then both $u$ and $v$ are <strong>harmonic</strong>:
+                $\nabla^2 u = u_{xx} + u_{yy} = 0$ and $\nabla^2 v = 0$.
+                Moreover, $v$ is called the <em>harmonic conjugate</em> of $u$.</p>
+            </div>
+
+            <!-- ═══ SIM 1: Domain Coloring ═══ -->
+            <h2>2.3 Domain Coloring</h2>
+            <p>Domain coloring is a technique to visualize complex functions $f(z)$ by mapping the
+            <strong>argument</strong> of $f(z)$ to hue and the <strong>modulus</strong> to brightness.
+            Select a function below or type your own expression.</p>
+
+            <div class="sim-card">
+                <div class="sim-card-header">
+                    <h3>Domain Coloring Explorer</h3>
+                    <span class="sim-badge">Interactive</span>
+                </div>
+                <div class="sim-canvas-wrap">
+                    <canvas id="domainSim" width="600" height="600" aria-label="Domain coloring visualization — select a complex function to see its color plot where hue represents argument and brightness represents modulus"></canvas>
+                </div>
+                <div class="sim-readout" id="domainReadout">
+                    <div class="readout-item"><span class="readout-label">f(z) =</span><span class="readout-value" id="domainFunc">z²</span></div>
+                    <div class="readout-item"><span class="readout-label">Hover z =</span><span class="readout-value" id="domainZ">—</span></div>
+                    <div class="readout-item"><span class="readout-label">f(z) =</span><span class="readout-value" id="domainFz">—</span></div>
+                </div>
+                <div class="sim-controls">
+                    <div class="control-group">
+                        <label for="domainSelect">Function:</label>
+                        <select id="domainSelect" aria-label="Select complex function">
+                            <option value="z^2">z²</option>
+                            <option value="z^3">z³</option>
+                            <option value="1/z">1/z</option>
+                            <option value="sin(z)">sin(z)</option>
+                            <option value="cos(z)">cos(z)</option>
+                            <option value="exp(z)">exp(z)</option>
+                            <option value="log(z)">log(z)</option>
+                            <option value="z + 1/z">z + 1/z</option>
+                            <option value="tan(z)">tan(z)</option>
+                            <option value="(z^2 - 1)/(z^2 + 1)">(z²−1)/(z²+1)</option>
+                            <option value="custom">Custom...</option>
+                        </select>
+                    </div>
+                    <div class="control-group" id="customGroup" style="display:none">
+                        <label for="customExpr">f(z) =</label>
+                        <input type="text" id="customExpr" value="z^2 + 1" style="width:140px" aria-label="Custom function expression">
+                        <button class="btn btn-sm" id="customApply">Apply</button>
+                    </div>
+                    <div class="control-group">
+                        <label for="domainZoom">Zoom:</label>
+                        <input type="range" id="domainZoom" min="1" max="10" step="0.5" value="3" aria-label="Zoom level">
+                    </div>
+                </div>
+                <details class="sim-info">
+                    <summary>ℹ What to observe</summary>
+                    <div class="info-content">
+                        <p>Each color represents a phase (argument): red ≈ 0, green ≈ 2π/3, blue ≈ 4π/3.
+                        Where all colors converge to a single point, there is a <strong>zero</strong> or
+                        <strong>pole</strong>. The rings of constant brightness correspond to
+                        $|f(z)| = 1, 2, 3, \ldots$ Hover to see exact values.</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- ═══ SIM 2: Cauchy-Riemann Checker ═══ -->
+            <h2>2.4 Visualizing the Cauchy–Riemann Equations</h2>
+            <p>For an analytic function $f = u + iv$, the Cauchy–Riemann equations require
+            $u_x = v_y$ and $u_y = -v_x$. Below we plot $u$ and $v$ as heatmaps and overlay
+            gradient arrows. When the function is analytic, the arrows satisfy the CR conditions everywhere.</p>
+
+            <div class="sim-card">
+                <div class="sim-card-header">
+                    <h3>Cauchy–Riemann Visualizer</h3>
+                    <span class="sim-badge">Interactive</span>
+                </div>
+                <div class="sim-canvas-wrap" style="display:flex; gap:2px;">
+                    <canvas id="crSimU" width="400" height="400" aria-label="Real part u(x,y) heatmap of the selected function"></canvas>
+                    <canvas id="crSimV" width="400" height="400" aria-label="Imaginary part v(x,y) heatmap of the selected function"></canvas>
+                </div>
+                <div class="sim-readout">
+                    <div class="readout-item"><span class="readout-label">Function:</span><span class="readout-value" id="crFuncLabel">z²</span></div>
+                    <div class="readout-item"><span class="readout-label">u_x = v_y?</span><span class="readout-value" id="crCheck1" style="color:#2ed8a4">✓ Yes</span></div>
+                    <div class="readout-item"><span class="readout-label">u_y = -v_x?</span><span class="readout-value" id="crCheck2" style="color:#2ed8a4">✓ Yes</span></div>
+                </div>
+                <div class="sim-controls">
+                    <div class="control-group">
+                        <label for="crSelect">Function:</label>
+                        <select id="crSelect" aria-label="Select function for CR check">
+                            <option value="z^2">z² (analytic)</option>
+                            <option value="exp(z)">exp(z) (analytic)</option>
+                            <option value="sin(z)">sin(z) (analytic)</option>
+                            <option value="conj">z̄ (NOT analytic)</option>
+                            <option value="rez">Re(z) (NOT analytic)</option>
+                            <option value="absz">|z| (NOT analytic)</option>
+                        </select>
+                    </div>
+                    <button class="btn" id="crReset" aria-label="Reset view">↺ Reset</button>
+                </div>
+                <details class="sim-info">
+                    <summary>ℹ What to observe</summary>
+                    <div class="info-content">
+                        <p>Left canvas: the real part $u(x,y)$. Right canvas: the imaginary part $v(x,y)$.
+                        Arrows show the gradient directions. For analytic functions, the gradients of $u$ and $v$
+                        are always perpendicular (and equal in magnitude). For non-analytic functions like $\bar{z}$
+                        or $|z|$, they fail the CR test.</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- ═══ SIM 3: Conformal Grid Mapping ═══ -->
+            <h2>2.5 Conformal Mapping Preview</h2>
+            <p>An analytic function with $f'(z) \neq 0$ is <strong>conformal</strong>: it preserves angles
+            between curves. The grid on the left is mapped through $f$ to produce the deformed grid on the right.
+            Notice how right angles are preserved.</p>
+
+            <div class="sim-card">
+                <div class="sim-card-header">
+                    <h3>Conformal Grid Mapping</h3>
+                    <span class="sim-badge">Animated</span>
+                </div>
+                <div class="sim-canvas-wrap" style="display:flex; gap:2px;">
+                    <canvas id="gridIn" width="400" height="400" aria-label="Input grid in the z-plane before mapping"></canvas>
+                    <canvas id="gridOut" width="400" height="400" aria-label="Output grid in the w-plane after conformal mapping"></canvas>
+                </div>
+                <div class="sim-readout">
+                    <div class="readout-item"><span class="readout-label">Mapping:</span><span class="readout-value" id="gridFuncLabel">z²</span></div>
+                </div>
+                <div class="sim-controls">
+                    <button class="btn" id="gridPlay" aria-label="Play or pause animation">▶ Play</button>
+                    <button class="btn" id="gridReset" aria-label="Reset grid mapping">↺ Reset</button>
+                    <div class="control-group">
+                        <label for="gridSelect">f(z) =</label>
+                        <select id="gridSelect" aria-label="Select mapping function">
+                            <option value="z^2">z²</option>
+                            <option value="1/z">1/z</option>
+                            <option value="exp(z)">exp(z)</option>
+                            <option value="sin(z)">sin(z)</option>
+                            <option value="z + 1/z">z + 1/z (Joukowski)</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="gridT">Blend:</label>
+                        <input type="range" id="gridT" min="0" max="1" step="0.01" value="0" aria-label="Interpolation parameter">
+                    </div>
+                </div>
+                <details class="sim-info">
+                    <summary>ℹ What to observe</summary>
+                    <div class="info-content">
+                        <p>Press Play or drag the Blend slider. The left grid shows the identity (z-plane).
+                        As the blend increases, the right grid smoothly deforms under $f$.
+                        Notice that grid lines still meet at right angles — that's conformality!
+                        Near zeros of $f'(z)$, angles may double (for a simple zero of $f'$).</p>
+                    </div>
+                </details>
+            </div>
+
+            <h2>2.6 Elementary Complex Functions</h2>
+
+            <div class="definition">
+                <p>The <strong>complex exponential</strong> is $e^z = e^x(\cos y + i \sin y)$, which is
+                entire (analytic everywhere) and periodic with period $2\pi i$.</p>
+            </div>
+
+            <p>The complex logarithm is multi-valued: $\log z = \ln|z| + i(\arg z + 2\pi k)$ for
+            $k \in \mathbb{Z}$. The <strong>principal branch</strong> uses $-\pi < \arg z \le \pi$.
+            The branch cut runs along the negative real axis.</p>
+
+            <div class="theorem">
+                <p><strong>(Identity Theorem)</strong> If $f$ and $g$ are analytic on a domain $D$ and
+                $f(z_n) = g(z_n)$ for a sequence $\{z_n\}$ converging to a point in $D$, then
+                $f \equiv g$ on all of $D$.</p>
+            </div>
+
+            <div class="section-divider"></div>
+            <h2>Key Takeaways</h2>
+            <div class="key-concepts">
+                <div class="key-concept">
+                    <h4>Cauchy–Riemann</h4>
+                    <p>$u_x = v_y$ and $u_y = -v_x$ — the gateway to analyticity.</p>
+                </div>
+                <div class="key-concept">
+                    <h4>Domain Coloring</h4>
+                    <p>Hue = argument, brightness = modulus. Zeros and poles are visible as color vortices.</p>
+                </div>
+                <div class="key-concept">
+                    <h4>Conformality</h4>
+                    <p>Analytic functions with $f'(z)\neq 0$ preserve angles between curves.</p>
+                </div>
+                <div class="key-concept">
+                    <h4>Rigidity</h4>
+                    <p>Analytic functions are completely determined by their values on any convergent sequence.</p>
+                </div>
+            </div>
+
+            <footer class="page-footer">
+                <p>Complex Analysis — Interactive Visualizations · <a href="../../LICENSE">MIT License</a> · 2026</p>
+            </footer>
+        </div>
+    </main>
+
+    <script src="../../assets/js/utils/complex-math.js"></script>
+    <script src="../../assets/js/utils/colormap.js"></script>
+    <script src="../../assets/js/nav.js"></script>
+
+    <script>
+    /* ── Shared function map ── */
+    function getFunc(val) {
+        switch(val) {
+            case 'z^2': return z => z.mul(z);
+            case 'z^3': return z => z.mul(z).mul(z);
+            case '1/z': return z => Complex.one().div(z);
+            case 'sin(z)': return z => z.sin();
+            case 'cos(z)': return z => z.cos();
+            case 'exp(z)': return z => z.exp();
+            case 'log(z)': return z => z.log();
+            case 'z + 1/z': return z => z.add(Complex.one().div(z));
+            case 'tan(z)': return z => z.tan();
+            case '(z^2 - 1)/(z^2 + 1)': return z => z.mul(z).sub(Complex.one()).div(z.mul(z).add(Complex.one()));
+            case 'conj': return z => z.conj();
+            case 'rez': return z => new Complex(z.re, 0);
+            case 'absz': return z => new Complex(z.abs(), 0);
+            default: return z => Complex.parse(val, z);
+        }
+    }
+
+    /* ══════════════════════ SIM 1: Domain Coloring ══════════════════════ */
+    (function() {
+        const canvas = document.getElementById('domainSim');
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width, H = canvas.height;
+        let func = getFunc('z^2');
+        let zoom = 3;
+        let funcLabel = 'z²';
+
+        function render() {
+            const imageData = ctx.createImageData(W, H);
+            renderDomainColoring(imageData, func, -zoom, zoom, -zoom, zoom);
+            ctx.putImageData(imageData, 0, 0);
+        }
+
+        document.getElementById('domainSelect').addEventListener('change', e => {
+            const v = e.target.value;
+            if (v === 'custom') {
+                document.getElementById('customGroup').style.display = 'flex';
+                return;
+            }
+            document.getElementById('customGroup').style.display = 'none';
+            func = getFunc(v);
+            funcLabel = e.target.options[e.target.selectedIndex].text;
+            document.getElementById('domainFunc').textContent = funcLabel;
+            render();
+        });
+
+        document.getElementById('customApply').addEventListener('click', () => {
+            const expr = document.getElementById('customExpr').value;
+            func = z => Complex.parse(expr, z);
+            funcLabel = expr;
+            document.getElementById('domainFunc').textContent = funcLabel;
+            render();
+        });
+
+        document.getElementById('domainZoom').addEventListener('input', e => {
+            zoom = parseFloat(e.target.value);
+            render();
+        });
+
+        canvas.addEventListener('pointermove', e => {
+            const rect = canvas.getBoundingClientRect();
+            const sx = (e.clientX - rect.left) / rect.width;
+            const sy = (e.clientY - rect.top) / rect.height;
+            const z = new Complex(-zoom + sx * 2 * zoom, zoom - sy * 2 * zoom);
+            let fz;
+            try { fz = func(z); } catch(err) { fz = Complex.zero(); }
+            document.getElementById('domainZ').textContent = z.toString(2);
+            document.getElementById('domainFz').textContent = fz.toString(2);
+        });
+
+        render();
+    })();
+
+    /* ══════════════════════ SIM 2: Cauchy-Riemann ══════════════════════ */
+    (function() {
+        const canU = document.getElementById('crSimU');
+        const canV = document.getElementById('crSimV');
+        const ctxU = canU.getContext('2d');
+        const ctxV = canV.getContext('2d');
+        const W = canU.width, H = canU.height;
+        let funcKey = 'z^2';
+        const range = 2;
+
+        function render() {
+            const func = getFunc(funcKey);
+            const imgU = ctxU.createImageData(W, H);
+            const imgV = ctxV.createImageData(W, H);
+
+            let uMin = Infinity, uMax = -Infinity, vMin = Infinity, vMax = -Infinity;
+            const uArr = new Float32Array(W * H);
+            const vArr = new Float32Array(W * H);
+
+            for (let py = 0; py < H; py++) {
+                const y = range - (py / H) * 2 * range;
+                for (let px = 0; px < W; px++) {
+                    const x = -range + (px / W) * 2 * range;
+                    const z = new Complex(x, y);
+                    let fz;
+                    try { fz = func(z); } catch(e) { fz = Complex.zero(); }
+                    const idx = py * W + px;
+                    const u = isFinite(fz.re) ? fz.re : 0;
+                    const v = isFinite(fz.im) ? fz.im : 0;
+                    uArr[idx] = u;
+                    vArr[idx] = v;
+                    if (u < uMin) uMin = u; if (u > uMax) uMax = u;
+                    if (v < vMin) vMin = v; if (v > vMax) vMax = v;
+                }
+            }
+
+            for (let i = 0; i < W * H; i++) {
+                const cu = viridis((uArr[i] - uMin) / (uMax - uMin || 1));
+                const cv = plasma((vArr[i] - vMin) / (vMax - vMin || 1));
+                const idx = i * 4;
+                imgU.data[idx] = cu.r; imgU.data[idx+1] = cu.g; imgU.data[idx+2] = cu.b; imgU.data[idx+3] = 255;
+                imgV.data[idx] = cv.r; imgV.data[idx+1] = cv.g; imgV.data[idx+2] = cv.b; imgV.data[idx+3] = 255;
+            }
+
+            ctxU.putImageData(imgU, 0, 0);
+            ctxV.putImageData(imgV, 0, 0);
+
+            /* Labels */
+            ctxU.fillStyle = 'rgba(255,255,255,0.8)';
+            ctxU.font = '16px EB Garamond, serif';
+            ctxU.fillText('u(x, y) = Re f', 10, 24);
+            ctxV.fillStyle = 'rgba(255,255,255,0.8)';
+            ctxV.font = '16px EB Garamond, serif';
+            ctxV.fillText('v(x, y) = Im f', 10, 24);
+
+            /* Draw gradient arrows */
+            const step = 40;
+            const h = 0.01;
+            for (let py = step; py < H; py += step) {
+                const y0 = range - (py / H) * 2 * range;
+                for (let px = step; px < W; px += step) {
+                    const x0 = -range + (px / W) * 2 * range;
+                    const z0 = new Complex(x0, y0);
+                    let fz, fzx, fzy;
+                    try {
+                        fz = func(z0);
+                        fzx = func(new Complex(x0 + h, y0));
+                        fzy = func(new Complex(x0, y0 + h));
+                    } catch(e) { continue; }
+
+                    const ux = (fzx.re - fz.re) / h;
+                    const uy = (fzy.re - fz.re) / h;
+                    const vx = (fzx.im - fz.im) / h;
+                    const vy = (fzy.im - fz.im) / h;
+
+                    const arrowLen = 12;
+                    const uMag = Math.sqrt(ux*ux + uy*uy);
+                    const vMag = Math.sqrt(vx*vx + vy*vy);
+
+                    if (uMag > 0.01) {
+                        const dx = (ux / uMag) * arrowLen;
+                        const dy = -(uy / uMag) * arrowLen;
+                        drawArrow2D(ctxU, px, py, px + dx, py + dy, 'rgba(255,255,255,0.6)');
+                    }
+                    if (vMag > 0.01) {
+                        const dx = (vx / vMag) * arrowLen;
+                        const dy = -(vy / vMag) * arrowLen;
+                        drawArrow2D(ctxV, px, py, px + dx, py + dy, 'rgba(255,255,255,0.6)');
+                    }
+                }
+            }
+
+            /* Check CR */
+            const testPt = new Complex(0.5, 0.5);
+            let f0, fx, fy;
+            try {
+                f0 = func(testPt);
+                fx = func(testPt.add(new Complex(h, 0)));
+                fy = func(testPt.add(new Complex(0, h)));
+            } catch(e) { return; }
+            const ux2 = (fx.re - f0.re) / h;
+            const uy2 = (fy.re - f0.re) / h;
+            const vx2 = (fx.im - f0.im) / h;
+            const vy2 = (fy.im - f0.im) / h;
+
+            const cr1 = Math.abs(ux2 - vy2) < 0.1;
+            const cr2 = Math.abs(uy2 + vx2) < 0.1;
+
+            const e1 = document.getElementById('crCheck1');
+            const e2 = document.getElementById('crCheck2');
+            e1.textContent = cr1 ? '✓ Yes' : '✗ No';
+            e1.style.color = cr1 ? '#2ed8a4' : '#e94560';
+            e2.textContent = cr2 ? '✓ Yes' : '✗ No';
+            e2.style.color = cr2 ? '#2ed8a4' : '#e94560';
+
+            const selEl = document.getElementById('crSelect');
+            document.getElementById('crFuncLabel').textContent = selEl.options[selEl.selectedIndex].text;
+        }
+
+        function drawArrow2D(ctx, x1, y1, x2, y2, color) {
+            ctx.save();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+            const angle = Math.atan2(y2 - y1, x2 - x1);
+            const hs = 4;
+            ctx.beginPath();
+            ctx.moveTo(x2, y2);
+            ctx.lineTo(x2 - hs * Math.cos(angle - 0.4), y2 - hs * Math.sin(angle - 0.4));
+            ctx.lineTo(x2 - hs * Math.cos(angle + 0.4), y2 - hs * Math.sin(angle + 0.4));
+            ctx.closePath();
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.restore();
+        }
+
+        document.getElementById('crSelect').addEventListener('change', e => {
+            funcKey = e.target.value;
+            render();
+        });
+        document.getElementById('crReset').addEventListener('click', () => {
+            document.getElementById('crSelect').value = 'z^2';
+            funcKey = 'z^2';
+            render();
+        });
+
+        render();
+    })();
+
+    /* ══════════════════════ SIM 3: Conformal Grid ══════════════════════ */
+    (function() {
+        const canIn = document.getElementById('gridIn');
+        const canOut = document.getElementById('gridOut');
+        const ctxIn = canIn.getContext('2d');
+        const ctxOut = canOut.getContext('2d');
+        const W = canIn.width, H = canIn.height;
+        let funcKey = 'z^2';
+        let t = 0;
+        let playing = false;
+        let animId, lastTime = 0;
+        const range = 2;
+
+        function lerp(a, b, t) { return a + (b - a) * t; }
+
+        function drawGrid(ctx, mapper, blend) {
+            ctx.fillStyle = '#050510';
+            ctx.fillRect(0, 0, W, H);
+
+            const steps = 30;
+            const nLines = 16;
+
+            function toScreen(z) {
+                return {
+                    x: (z.re + range) / (2 * range) * W,
+                    y: H - (z.im + range) / (2 * range) * H
+                };
+            }
+
+            /* Horizontal lines */
+            for (let i = 0; i <= nLines; i++) {
+                const v = -range + (i / nLines) * 2 * range;
+                ctx.beginPath();
+                const hue = (i / nLines) * 360;
+                ctx.strokeStyle = `hsla(${hue}, 60%, 55%, 0.6)`;
+                ctx.lineWidth = 1.2;
+                for (let j = 0; j <= steps; j++) {
+                    const u = -range + (j / steps) * 2 * range;
+                    const z = new Complex(u, v);
+                    let fz;
+                    try { fz = mapper(z); } catch(e) { fz = z; }
+                    const mapped = new Complex(
+                        lerp(z.re, fz.re, blend),
+                        lerp(z.im, fz.im, blend)
+                    );
+                    const p = toScreen(mapped);
+                    if (j === 0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y);
+                }
+                ctx.stroke();
+            }
+
+            /* Vertical lines */
+            for (let i = 0; i <= nLines; i++) {
+                const u = -range + (i / nLines) * 2 * range;
+                ctx.beginPath();
+                const hue = 180 + (i / nLines) * 180;
+                ctx.strokeStyle = `hsla(${hue}, 60%, 55%, 0.6)`;
+                ctx.lineWidth = 1.2;
+                for (let j = 0; j <= steps; j++) {
+                    const v = -range + (j / steps) * 2 * range;
+                    const z = new Complex(u, v);
+                    let fz;
+                    try { fz = mapper(z); } catch(e) { fz = z; }
+                    const mapped = new Complex(
+                        lerp(z.re, fz.re, blend),
+                        lerp(z.im, fz.im, blend)
+                    );
+                    const p = toScreen(mapped);
+                    if (j === 0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y);
+                }
+                ctx.stroke();
+            }
+        }
+
+        function render(timestamp) {
+            if (playing) {
+                const dt = lastTime ? (timestamp - lastTime) / 1000 : 0;
+                lastTime = timestamp;
+                t = Math.min(1, t + dt * 0.4);
+                document.getElementById('gridT').value = t;
+            }
+
+            const func = getFunc(funcKey);
+            drawGrid(ctxIn, z => z, 0);
+            drawGrid(ctxOut, func, t);
+
+            /* Labels */
+            ctxIn.fillStyle = 'rgba(255,255,255,0.6)';
+            ctxIn.font = '14px EB Garamond, serif';
+            ctxIn.fillText('z-plane', 10, 24);
+            ctxOut.fillStyle = 'rgba(255,255,255,0.6)';
+            ctxOut.font = '14px EB Garamond, serif';
+            ctxOut.fillText('w = f(z)', 10, 24);
+
+            document.getElementById('gridFuncLabel').textContent = funcKey;
+
+            if (playing && t < 1) {
+                animId = requestAnimationFrame(render);
+            } else if (playing && t >= 1) {
+                playing = false;
+                document.getElementById('gridPlay').textContent = '▶ Play';
+            }
+        }
+
+        document.getElementById('gridSelect').addEventListener('change', e => {
+            funcKey = e.target.value;
+            t = parseFloat(document.getElementById('gridT').value);
+            requestAnimationFrame(render);
+        });
+
+        document.getElementById('gridT').addEventListener('input', e => {
+            t = parseFloat(e.target.value);
+            requestAnimationFrame(render);
+        });
+
+        document.getElementById('gridPlay').addEventListener('click', () => {
+            playing = !playing;
+            document.getElementById('gridPlay').textContent = playing ? '⏸ Pause' : '▶ Play';
+            if (playing) {
+                if (t >= 1) t = 0;
+                lastTime = 0;
+                animId = requestAnimationFrame(render);
+            } else {
+                cancelAnimationFrame(animId);
+            }
+        });
+
+        document.getElementById('gridReset').addEventListener('click', () => {
+            playing = false;
+            document.getElementById('gridPlay').textContent = '▶ Play';
+            cancelAnimationFrame(animId);
+            t = 0;
+            document.getElementById('gridT').value = 0;
+            funcKey = 'z^2';
+            document.getElementById('gridSelect').value = 'z^2';
+            lastTime = 0;
+            requestAnimationFrame(render);
+        });
+
+        requestAnimationFrame(render);
+    })();
+    </script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false},
+                {left: "\\[", right: "\\]", display: true},
+                {left: "\\(", right: "\\)", display: false}
+            ]
+        });
+    });
+    </script>
+</body>
+</html>
