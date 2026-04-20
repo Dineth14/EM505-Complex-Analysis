@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 6 — Applications</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <button class="hamburger" aria-label="Open navigation" aria-expanded="false">☰</button>
+    <div class="overlay" aria-hidden="true"></div>
+    <nav class="sidebar" aria-label="Main navigation">
+        <div class="sidebar-brand"><h1>Complex Analysis</h1><div class="subtitle">Interactive Visualizations</div></div>
+        <div class="sidebar-nav" role="list"></div>
+        <div class="sidebar-footer">© 2026 · MIT License</div>
+    </nav>
+
+    <main class="main-content" id="main">
+        <div class="page-container">
+            <div class="breadcrumb">
+                <a href="../../index.html">Home</a><span class="sep">/</span><span>Chapter 6</span>
+            </div>
+
+            <div class="chapter-header">
+                <div class="chapter-label">Chapter 6</div>
+                <h1>Applications</h1>
+                <p class="chapter-desc">
+                    Complex analysis has stunning applications to fluid dynamics, electrostatics,
+                    fractal geometry, and the visualization of multi-valued functions via Riemann surfaces.
+                </p>
+            </div>
+
+            <h2>6.1 Potential Flow</h2>
+
+            <p>In 2D incompressible irrotational flow, the velocity field can be derived from a
+            <strong>complex potential</strong> $\Phi(z) = \phi(x,y) + i\psi(x,y)$ where $\phi$ is the
+            velocity potential and $\psi$ the stream function. Level curves of $\psi$ are streamlines.</p>
+
+            <div class="math-block">
+                $$\text{Velocity: } \overline{V} = \frac{d\Phi}{dz} = u - iv$$
+            </div>
+
+            <div class="example">
+                <p>Common potentials:
+                <ul style="margin-top:8px;">
+                    <li><strong>Uniform flow:</strong> $\Phi = Uz$ (velocity $U$ in the $x$-direction)</li>
+                    <li><strong>Source/sink:</strong> $\Phi = \frac{m}{2\pi}\log z$ (source of strength $m$)</li>
+                    <li><strong>Vortex:</strong> $\Phi = \frac{-i\Gamma}{2\pi}\log z$ (circulation $\Gamma$)</li>
+                    <li><strong>Flow around cylinder:</strong> $\Phi = U(z + a^2/z)$</li>
+                </ul></p>
+            </div>
+
+            <!-- ═══ SIM 1: Potential Flow ═══ -->
+            <div class="sim-card">
+                <div class="sim-card-header">
+                    <h3>2D Potential Flow</h3>
+                    <span class="sim-badge">Animated</span>
+                </div>
+                <div class="sim-canvas-wrap">
+                    <canvas id="flowSim" width="800" height="600" aria-label="2D potential flow visualization showing streamlines around a cylinder"></canvas>
+                </div>
+                <div class="sim-readout">
+                    <div class="readout-item"><span class="readout-label">Flow:</span><span class="readout-value" id="flowType">Cylinder</span></div>
+                    <div class="readout-item"><span class="readout-label">U =</span><span class="readout-value" id="flowU">1.00</span></div>
+                    <div class="readout-item"><span class="readout-label">Circulation:</span><span class="readout-value" id="flowGamma">0.00</span></div>
+                </div>
+                <div class="sim-controls">
+                    <button class="btn" id="flowPlay" aria-label="Play flow animation">▶ Play</button>
+                    <button class="btn" id="flowReset" aria-label="Reset flow">↺ Reset</button>
+                    <div class="control-group">
+                        <label for="flowSelect">Type:</label>
+                        <select id="flowSelect" aria-label="Select flow type">
+                            <option value="cylinder">Flow around cylinder</option>
+                            <option value="source">Source + sink</option>
+                            <option value="vortex">Free vortex</option>
+                            <option value="dipole">Dipole</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="flowCirc">Circulation:</label>
+                        <input type="range" id="flowCirc" min="-6" max="6" step="0.2" value="0" aria-label="Circulation parameter">
+                    </div>
+                </div>
+                <details class="sim-info">
+                    <summary>ℹ What to observe</summary>
+                    <div class="info-content">
+                        <p>Streamlines (colored curves) show the fluid paths. For flow around a cylinder,
+                        adding circulation ($\Gamma$) shifts the stagnation points and creates lift (the
+                        Magnus effect). The Kutta–Joukowski theorem: $L = -\rho U \Gamma$. A source+sink pair
+                        models flow around a Rankine oval.</p>
+                    </div>
+                </details>
+            </div>
+
+            <h2>6.2 Julia Sets</h2>
+
+            <p>For a complex polynomial $f_c(z) = z^2 + c$, the <strong>Julia set</strong> $J_c$ is the
+            boundary of the set of points whose orbits remain bounded under iteration. When $c$ is in the
+            Mandelbrot set, $J_c$ is connected; otherwise it is a Cantor dust.</p>
+
+            <!-- ═══ SIM 2: Julia Set ═══ -->
+            <div class="sim-card">
+                <div class="sim-card-header">
+                    <h3>Julia Set Explorer</h3>
+                    <span class="sim-badge">Interactive</span>
+                </div>
+                <div class="sim-canvas-wrap">
+                    <canvas id="juliaSim" width="700" height="700" aria-label="Julia set explorer — click to change the parameter c and see different Julia sets"></canvas>
+                </div>
+                <div class="sim-readout">
+                    <div class="readout-item"><span class="readout-label">c =</span><span class="readout-value" id="juliaC">−0.70 + 0.27i</span></div>
+                    <div class="readout-item"><span class="readout-label">Iterations:</span><span class="readout-value" id="juliaIter">100</span></div>
+                </div>
+                <div class="sim-controls">
+                    <button class="btn" id="juliaReset" aria-label="Reset Julia set">↺ Reset</button>
+                    <div class="control-group">
+                        <label for="juliaCr">Re(c):</label>
+                        <input type="range" id="juliaCr" min="-2" max="1" step="0.01" value="-0.7" aria-label="Real part of c">
+                    </div>
+                    <div class="control-group">
+                        <label for="juliaCi">Im(c):</label>
+                        <input type="range" id="juliaCi" min="-1.5" max="1.5" step="0.01" value="0.27" aria-label="Imaginary part of c">
+                    </div>
+                    <div class="control-group">
+                        <label for="juliaMaxIter">Max iter:</label>
+                        <input type="range" id="juliaMaxIter" min="20" max="300" step="10" value="100" aria-label="Maximum iterations">
+                    </div>
+                </div>
+                <details class="sim-info">
+                    <summary>ℹ What to observe</summary>
+                    <div class="info-content">
+                        <p>Points colored by how quickly $z_n = z_{n-1}^2 + c$ escapes to infinity.
+                        Black = bounded (in the filled Julia set). The fractal boundary is the Julia set itself.
+                        Try $c = -0.7 + 0.27i$ (a dragon), $c = 0.355 + 0.355i$ (a rabbit), or $c = -1.25$
+                        (a dendrite). Adjust the sliders to explore continuously.</p>
+                    </div>
+                </details>
+            </div>
+
+            <h2>6.3 Riemann Surfaces</h2>
+
+            <p>Multi-valued functions like $\sqrt{z}$ and $\log z$ become single-valued on their
+            <strong>Riemann surfaces</strong>. For $w = \sqrt{z}$, the Riemann surface is a two-sheeted
+            surface with a branch point at the origin, connected by a branch cut.</p>
+
+            <!-- ═══ SIM 3: Riemann Surface (Three.js) ═══ -->
+            <div class="sim-card">
+                <div class="sim-card-header">
+                    <h3>Riemann Surface of √z</h3>
+                    <span class="sim-badge">3D</span>
+                </div>
+                <div class="sim-canvas-wrap">
+                    <div id="riemannContainer" style="width:100%;height:500px;cursor:grab;" aria-label="3D Riemann surface of the square root function — click and drag to rotate"></div>
+                </div>
+                <div class="sim-readout">
+                    <div class="readout-item"><span class="readout-label">Function:</span><span class="readout-value" id="riemannFunc">√z</span></div>
+                    <div class="readout-item"><span class="readout-label">Sheets:</span><span class="readout-value">2</span></div>
+                </div>
+                <div class="sim-controls">
+                    <button class="btn" id="riemannPlay" aria-label="Play rotation animation">▶ Play</button>
+                    <button class="btn" id="riemannReset" aria-label="Reset view">↺ Reset</button>
+                    <div class="control-group">
+                        <label for="riemannFuncSel">Function:</label>
+                        <select id="riemannFuncSel" aria-label="Select Riemann surface">
+                            <option value="sqrt">√z (2 sheets)</option>
+                            <option value="cbrt">∛z (3 sheets)</option>
+                            <option value="log">log(z) (spiral)</option>
+                        </select>
+                    </div>
+                </div>
+                <details class="sim-info">
+                    <summary>ℹ What to observe</summary>
+                    <div class="info-content">
+                        <p>The 3D surface shows the real or imaginary part of the multi-valued function
+                        as height. For $\sqrt{z}$, notice the two sheets that connect smoothly at the
+                        branch point (origin). For $\log z$, the surface spirals infinitely. Drag to rotate.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="section-divider"></div>
+            <h2>Key Takeaways</h2>
+            <div class="key-concepts">
+                <div class="key-concept">
+                    <h4>Complex Potential</h4>
+                    <p>2D irrotational flow = analytic function. Streamlines are level curves of Im(Φ).</p>
+                </div>
+                <div class="key-concept">
+                    <h4>Julia Sets</h4>
+                    <p>Iterating $z^2 + c$ reveals intricate fractal boundaries governed by complex dynamics.</p>
+                </div>
+                <div class="key-concept">
+                    <h4>Riemann Surfaces</h4>
+                    <p>Multi-valued functions become single-valued on branched covering surfaces.</p>
+                </div>
+                <div class="key-concept">
+                    <h4>Physical Applications</h4>
+                    <p>Electrostatics, heat flow, and fluid mechanics all speak the language of complex analysis.</p>
+                </div>
+            </div>
+
+            <footer class="page-footer">
+                <p>Complex Analysis — Interactive Visualizations · <a href="../../LICENSE">MIT License</a> · 2026</p>
+            </footer>
+        </div>
+    </main>
+
+    <script src="../../assets/js/utils/complex-math.js"></script>
+    <script src="../../assets/js/utils/colormap.js"></script>
+    <script src="../../assets/js/nav.js"></script>
+
+    <script>
+    /* ══════════════════════ SIM 1: Potential Flow ══════════════════════ */
+    (function() {
+        const canvas = document.getElementById('flowSim');
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width, H = canvas.height;
+        const xRange = [-4, 4], yRange = [-3, 3];
+        let flowType = 'cylinder';
+        let gamma = 0;
+        let playing = false, animId, lastTime = 0, time = 0;
+
+        function potential(z) {
+            switch(flowType) {
+                case 'cylinder': {
+                    const U = 1;
+                    const a = 1;
+                    const circ = new Complex(0, -gamma / (2 * Math.PI));
+                    return z.mul(U).add(Complex.fromPolar(a * a * U, 0).div(z)).add(circ.mul(z.log()));
+                }
+                case 'source': {
+                    const s1 = new Complex(-1, 0);
+                    const s2 = new Complex(1, 0);
+                    return z.sub(s1).log().mul(1 / (2 * Math.PI)).sub(z.sub(s2).log().mul(1 / (2 * Math.PI)));
+                }
+                case 'vortex': {
+                    return z.log().mul(new Complex(0, -1 / (2 * Math.PI)));
+                }
+                case 'dipole': {
+                    return Complex.one().div(z);
+                }
+            }
+        }
+
+        function draw(timestamp) {
+            if (playing) {
+                const dt = lastTime ? (timestamp - lastTime) / 1000 : 0;
+                lastTime = timestamp;
+                time += dt;
+            }
+
+            ctx.fillStyle = '#050510';
+            ctx.fillRect(0, 0, W, H);
+
+            /* Grid */
+            ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+            ctx.lineWidth = 1;
+            for (let x = Math.ceil(xRange[0]); x <= xRange[1]; x++) {
+                const sx = (x - xRange[0]) / (xRange[1] - xRange[0]) * W;
+                ctx.beginPath(); ctx.moveTo(sx, 0); ctx.lineTo(sx, H); ctx.stroke();
+            }
+            for (let y = Math.ceil(yRange[0]); y <= yRange[1]; y++) {
+                const sy = H - (y - yRange[0]) / (yRange[1] - yRange[0]) * H;
+                ctx.beginPath(); ctx.moveTo(0, sy); ctx.lineTo(W, sy); ctx.stroke();
+            }
+
+            /* Draw cylinder for cylinder flow */
+            if (flowType === 'cylinder') {
+                const oc = {
+                    x: (0 - xRange[0]) / (xRange[1] - xRange[0]) * W,
+                    y: H - (0 - yRange[0]) / (yRange[1] - yRange[0]) * H
+                };
+                const r = (1) / (xRange[1] - xRange[0]) * W;
+                ctx.beginPath();
+                ctx.arc(oc.x, oc.y, r, 0, 2 * Math.PI);
+                ctx.fillStyle = 'rgba(30, 30, 80, 0.9)';
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(124, 108, 240, 0.6)';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+
+            /* Streamlines: trace particles along stream function */
+            const nStreams = 24;
+            const steps = 200;
+            const h = 0.04;
+
+            for (let i = 0; i < nStreams; i++) {
+                const startY = yRange[0] + (i + 0.5) / nStreams * (yRange[1] - yRange[0]);
+                let z = new Complex(xRange[0], startY);
+                ctx.beginPath();
+                const hue = (i / nStreams) * 240 + 160;
+                ctx.strokeStyle = `hsla(${hue % 360}, 55%, 55%, 0.6)`;
+                ctx.lineWidth = 1.2;
+                let firstPt = true;
+
+                for (let s = 0; s < steps; s++) {
+                    if (z.abs() < 1.05 && flowType === 'cylinder') break;
+                    if (!isFinite(z.re) || !isFinite(z.im)) break;
+                    if (z.re > xRange[1] || z.re < xRange[0] || z.im > yRange[1] || z.im < yRange[0]) break;
+
+                    const sx = (z.re - xRange[0]) / (xRange[1] - xRange[0]) * W;
+                    const sy = H - (z.im - yRange[0]) / (yRange[1] - yRange[0]) * H;
+
+                    if (firstPt) { ctx.moveTo(sx, sy); firstPt = false; }
+                    else ctx.lineTo(sx, sy);
+
+                    /* Velocity = dPhi/dz conjugate */
+                    const eps = 0.001;
+                    let phi, phix, phiy;
+                    try {
+                        phi = potential(z);
+                        phix = potential(z.add(new Complex(eps, 0)));
+                        phiy = potential(z.add(new Complex(0, eps)));
+                    } catch(e) { break; }
+
+                    const dPhi_dx = phix.sub(phi).div(eps);
+                    const u = dPhi_dx.re;
+                    const v = -dPhi_dx.im;
+                    const speed = Math.sqrt(u * u + v * v);
+                    if (speed < 0.001) break;
+
+                    z = z.add(new Complex(u / speed * h, v / speed * h));
+                }
+                ctx.stroke();
+            }
+
+            /* Particles when playing */
+            if (playing) {
+                const nParticles = 30;
+                ctx.fillStyle = 'rgba(240, 192, 64, 0.7)';
+                for (let i = 0; i < nParticles; i++) {
+                    const phase = (i / nParticles) * (xRange[1] - xRange[0]) + time * 0.5;
+                    const startY = yRange[0] + (i / nParticles) * (yRange[1] - yRange[0]);
+                    let z = new Complex(xRange[0] + (phase % (xRange[1] - xRange[0])), startY);
+
+                    /* Advance particle */
+                    for (let s = 0; s < 20; s++) {
+                        if (z.abs() < 1.05 && flowType === 'cylinder') break;
+                        const eps = 0.001;
+                        let phi, phix;
+                        try { phi = potential(z); phix = potential(z.add(new Complex(eps, 0))); } catch(e) { break; }
+                        const dPhi = phix.sub(phi).div(eps);
+                        const u = dPhi.re, v = -dPhi.im;
+                        const speed = Math.sqrt(u*u + v*v);
+                        if (speed < 0.001) break;
+                        z = z.add(new Complex(u / speed * 0.05, v / speed * 0.05));
+                    }
+
+                    if (isFinite(z.re) && isFinite(z.im)) {
+                        const sx = (z.re - xRange[0]) / (xRange[1] - xRange[0]) * W;
+                        const sy = H - (z.im - yRange[0]) / (yRange[1] - yRange[0]) * H;
+                        ctx.beginPath();
+                        ctx.arc(sx, sy, 2.5, 0, 2 * Math.PI);
+                        ctx.fill();
+                    }
+                }
+            }
+
+            document.getElementById('flowType').textContent = flowType;
+            document.getElementById('flowU').textContent = '1.00';
+            document.getElementById('flowGamma').textContent = gamma.toFixed(2);
+
+            if (playing) animId = requestAnimationFrame(draw);
+        }
+
+        document.getElementById('flowSelect').addEventListener('change', e => {
+            flowType = e.target.value;
+            if (!playing) requestAnimationFrame(draw);
+        });
+        document.getElementById('flowCirc').addEventListener('input', e => {
+            gamma = parseFloat(e.target.value);
+            if (!playing) requestAnimationFrame(draw);
+        });
+        document.getElementById('flowPlay').addEventListener('click', () => {
+            playing = !playing;
+            document.getElementById('flowPlay').textContent = playing ? '⏸ Pause' : '▶ Play';
+            if (playing) { lastTime = 0; animId = requestAnimationFrame(draw); }
+        });
+        document.getElementById('flowReset').addEventListener('click', () => {
+            playing = false;
+            document.getElementById('flowPlay').textContent = '▶ Play';
+            gamma = 0; time = 0;
+            document.getElementById('flowCirc').value = 0;
+            flowType = 'cylinder';
+            document.getElementById('flowSelect').value = 'cylinder';
+            requestAnimationFrame(draw);
+        });
+
+        requestAnimationFrame(draw);
+    })();
+
+    /* ══════════════════════ SIM 2: Julia Set ══════════════════════ */
+    (function() {
+        const canvas = document.getElementById('juliaSim');
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width, H = canvas.height;
+        let cr = -0.7, ci = 0.27;
+        let maxIter = 100;
+        const range = 2;
+
+        function render() {
+            const imageData = ctx.createImageData(W, H);
+            const data = imageData.data;
+
+            for (let py = 0; py < H; py++) {
+                const y0 = range - (py / H) * 2 * range;
+                for (let px = 0; px < W; px++) {
+                    const x0 = -range + (px / W) * 2 * range;
+                    let x = x0, y = y0;
+                    let iter = 0;
+                    while (x * x + y * y <= 4 && iter < maxIter) {
+                        const xn = x * x - y * y + cr;
+                        const yn = 2 * x * y + ci;
+                        x = xn; y = yn;
+                        iter++;
+                    }
+
+                    const idx = (py * W + px) * 4;
+                    if (iter === maxIter) {
+                        data[idx] = 0; data[idx + 1] = 0; data[idx + 2] = 0;
+                    } else {
+                        const t = iter / maxIter;
+                        const hue = 240 + t * 300;
+                        const rgb = hslToRgb((hue % 360) / 360, 0.8, 0.15 + t * 0.55);
+                        data[idx] = rgb.r; data[idx + 1] = rgb.g; data[idx + 2] = rgb.b;
+                    }
+                    data[idx + 3] = 255;
+                }
+            }
+            ctx.putImageData(imageData, 0, 0);
+        }
+
+        function update() {
+            document.getElementById('juliaC').textContent = new Complex(cr, ci).toString(2);
+            document.getElementById('juliaIter').textContent = maxIter;
+            render();
+        }
+
+        document.getElementById('juliaCr').addEventListener('input', e => { cr = parseFloat(e.target.value); update(); });
+        document.getElementById('juliaCi').addEventListener('input', e => { ci = parseFloat(e.target.value); update(); });
+        document.getElementById('juliaMaxIter').addEventListener('input', e => { maxIter = parseInt(e.target.value); update(); });
+        document.getElementById('juliaReset').addEventListener('click', () => {
+            cr = -0.7; ci = 0.27; maxIter = 100;
+            document.getElementById('juliaCr').value = cr;
+            document.getElementById('juliaCi').value = ci;
+            document.getElementById('juliaMaxIter').value = maxIter;
+            update();
+        });
+
+        update();
+    })();
+
+    /* ══════════════════════ SIM 3: Riemann Surface (Three.js) ══════════════════════ */
+    (function() {
+        const container = document.getElementById('riemannContainer');
+        const rect = container.getBoundingClientRect();
+        const width = container.clientWidth || 800;
+        const height = 500;
+
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x050510);
+
+        const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 100);
+        camera.position.set(3, 3, 3);
+        camera.lookAt(0, 0, 0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(width, height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        /* Lights */
+        scene.add(new THREE.AmbientLight(0x404060, 0.8));
+        const dirLight = new THREE.DirectionalLight(0xfff0d0, 1.0);
+        dirLight.position.set(3, 5, 3);
+        scene.add(dirLight);
+
+        let currentFunc = 'sqrt';
+        let meshGroup = new THREE.Group();
+        scene.add(meshGroup);
+
+        function buildSurface(funcType) {
+            while (meshGroup.children.length) {
+                const child = meshGroup.children[0];
+                child.geometry.dispose();
+                child.material.dispose();
+                meshGroup.remove(child);
+            }
+
+            const resolution = 80;
+            const rMax = 2;
+            let sheets = 2;
+            if (funcType === 'cbrt') sheets = 3;
+            if (funcType === 'log') sheets = 3;
+
+            for (let sheet = 0; sheet < sheets; sheet++) {
+                const geometry = new THREE.BufferGeometry();
+                const vertices = [];
+                const colors = [];
+                const indices = [];
+
+                for (let ir = 0; ir <= resolution; ir++) {
+                    const r = 0.05 + (ir / resolution) * rMax;
+                    for (let it = 0; it <= resolution; it++) {
+                        const theta = (it / resolution) * 2 * Math.PI;
+                        const fullAngle = theta + sheet * 2 * Math.PI;
+
+                        let x, y, z;
+                        if (funcType === 'sqrt') {
+                            const sqrtR = Math.sqrt(r);
+                            const halfAngle = fullAngle / 2;
+                            x = r * Math.cos(theta);
+                            y = r * Math.sin(theta);
+                            z = sqrtR * Math.cos(halfAngle) * 0.8;
+                        } else if (funcType === 'cbrt') {
+                            const cbrtR = Math.pow(r, 1/3);
+                            const thirdAngle = fullAngle / 3;
+                            x = r * Math.cos(theta);
+                            y = r * Math.sin(theta);
+                            z = cbrtR * Math.cos(thirdAngle) * 0.8;
+                        } else { /* log */
+                            x = r * Math.cos(theta);
+                            y = r * Math.sin(theta);
+                            z = (fullAngle - sheets * Math.PI) * 0.15;
+                        }
+
+                        vertices.push(x, z, y);
+
+                        /* Color by phase */
+                        const hue = ((theta / (2 * Math.PI)) + sheet / sheets) % 1;
+                        const rgb = hslToRgbThree(hue, 0.7, 0.5);
+                        colors.push(rgb.r, rgb.g, rgb.b);
+                    }
+                }
+
+                for (let ir = 0; ir < resolution; ir++) {
+                    for (let it = 0; it < resolution; it++) {
+                        const a = ir * (resolution + 1) + it;
+                        const b = a + 1;
+                        const c = a + (resolution + 1);
+                        const d = c + 1;
+                        indices.push(a, b, c);
+                        indices.push(b, d, c);
+                    }
+                }
+
+                geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+                geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+                geometry.setIndex(indices);
+                geometry.computeVertexNormals();
+
+                const material = new THREE.MeshPhongMaterial({
+                    vertexColors: true,
+                    side: THREE.DoubleSide,
+                    shininess: 40,
+                    transparent: true,
+                    opacity: 0.85,
+                });
+                meshGroup.add(new THREE.Mesh(geometry, material));
+            }
+
+            /* Axes */
+            const axMat = new THREE.LineBasicMaterial({ color: 0x444466 });
+            const axGeo = new THREE.BufferGeometry().setFromPoints([
+                new THREE.Vector3(-rMax, 0, 0), new THREE.Vector3(rMax, 0, 0),
+            ]);
+            meshGroup.add(new THREE.Line(axGeo, axMat));
+            const ayGeo = new THREE.BufferGeometry().setFromPoints([
+                new THREE.Vector3(0, 0, -rMax), new THREE.Vector3(0, 0, rMax),
+            ]);
+            meshGroup.add(new THREE.Line(ayGeo, axMat));
+            const azGeo = new THREE.BufferGeometry().setFromPoints([
+                new THREE.Vector3(0, -1.5, 0), new THREE.Vector3(0, 1.5, 0),
+            ]);
+            meshGroup.add(new THREE.Line(azGeo, axMat));
+        }
+
+        function hslToRgbThree(h, s, l) {
+            const c = (1 - Math.abs(2 * l - 1)) * s;
+            const x = c * (1 - Math.abs((h * 6) % 2 - 1));
+            const m = l - c / 2;
+            let r, g, b;
+            const sec = Math.floor(h * 6) % 6;
+            switch(sec) {
+                case 0: r=c;g=x;b=0;break; case 1: r=x;g=c;b=0;break;
+                case 2: r=0;g=c;b=x;break; case 3: r=0;g=x;b=c;break;
+                case 4: r=x;g=0;b=c;break; case 5: r=c;g=0;b=x;break;
+            }
+            return { r: r+m, g: g+m, b: b+m };
+        }
+
+        buildSurface(currentFunc);
+
+        /* Manual orbit controls */
+        let isDragging = false;
+        let prevX = 0, prevY = 0;
+        let spherical = { theta: Math.PI / 4, phi: Math.PI / 4, radius: 5 };
+        let autoRotate = false, rotateId;
+
+        function updateCamera() {
+            camera.position.x = spherical.radius * Math.sin(spherical.phi) * Math.cos(spherical.theta);
+            camera.position.y = spherical.radius * Math.cos(spherical.phi);
+            camera.position.z = spherical.radius * Math.sin(spherical.phi) * Math.sin(spherical.theta);
+            camera.lookAt(0, 0, 0);
+        }
+        updateCamera();
+
+        renderer.domElement.addEventListener('pointerdown', e => {
+            isDragging = true;
+            prevX = e.clientX;
+            prevY = e.clientY;
+            renderer.domElement.style.cursor = 'grabbing';
+        });
+        renderer.domElement.addEventListener('pointermove', e => {
+            if (!isDragging) return;
+            const dx = e.clientX - prevX;
+            const dy = e.clientY - prevY;
+            spherical.theta -= dx * 0.01;
+            spherical.phi = Math.max(0.1, Math.min(Math.PI - 0.1, spherical.phi + dy * 0.01));
+            prevX = e.clientX;
+            prevY = e.clientY;
+            updateCamera();
+        });
+        renderer.domElement.addEventListener('pointerup', () => {
+            isDragging = false;
+            renderer.domElement.style.cursor = 'grab';
+        });
+        renderer.domElement.addEventListener('wheel', e => {
+            spherical.radius = Math.max(2, Math.min(12, spherical.radius + e.deltaY * 0.005));
+            updateCamera();
+            e.preventDefault();
+        }, { passive: false });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            if (autoRotate && !isDragging) {
+                spherical.theta += 0.005;
+                updateCamera();
+            }
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        document.getElementById('riemannFuncSel').addEventListener('change', e => {
+            currentFunc = e.target.value;
+            const labels = { sqrt: '√z', cbrt: '∛z', log: 'log(z)' };
+            document.getElementById('riemannFunc').textContent = labels[currentFunc];
+            buildSurface(currentFunc);
+        });
+
+        document.getElementById('riemannPlay').addEventListener('click', () => {
+            autoRotate = !autoRotate;
+            document.getElementById('riemannPlay').textContent = autoRotate ? '⏸ Pause' : '▶ Play';
+        });
+
+        document.getElementById('riemannReset').addEventListener('click', () => {
+            autoRotate = false;
+            document.getElementById('riemannPlay').textContent = '▶ Play';
+            spherical = { theta: Math.PI / 4, phi: Math.PI / 4, radius: 5 };
+            updateCamera();
+            currentFunc = 'sqrt';
+            document.getElementById('riemannFuncSel').value = 'sqrt';
+            document.getElementById('riemannFunc').textContent = '√z';
+            buildSurface('sqrt');
+        });
+
+        /* Resize */
+        window.addEventListener('resize', () => {
+            const w = container.clientWidth;
+            camera.aspect = w / height;
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, height);
+        });
+    })();
+    </script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false},
+                {left: "\\[", right: "\\]", display: true},
+                {left: "\\(", right: "\\)", display: false}
+            ]
+        });
+    });
+    </script>
+</body>
+</html>

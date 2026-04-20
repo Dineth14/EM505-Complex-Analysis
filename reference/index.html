@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reference — Complex Analysis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <button class="hamburger" aria-label="Open navigation" aria-expanded="false">☰</button>
+    <div class="overlay" aria-hidden="true"></div>
+    <nav class="sidebar" aria-label="Main navigation">
+        <div class="sidebar-brand"><h1>Complex Analysis</h1><div class="subtitle">Interactive Visualizations</div></div>
+        <div class="sidebar-nav" role="list"></div>
+        <div class="sidebar-footer">© 2026 · MIT License</div>
+    </nav>
+
+    <main class="main-content" id="main">
+        <div class="page-container">
+            <div class="breadcrumb">
+                <a href="../index.html">Home</a><span class="sep">/</span><span>Reference</span>
+            </div>
+
+            <div class="chapter-header">
+                <div class="chapter-label">Appendix</div>
+                <h1>Reference</h1>
+                <p class="chapter-desc">
+                    A compact summary of notation, key results, and textbook references
+                    for the complex analysis course.
+                </p>
+            </div>
+
+            <!-- ═══ Notation ═══ -->
+            <h2>Notation</h2>
+
+            <table class="ref-table">
+                <thead>
+                    <tr><th>Symbol</th><th>Meaning</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>$\mathbb{C}$</td><td>The field of complex numbers</td></tr>
+                    <tr><td>$\mathbb{C}^* = \mathbb{C}\setminus\{0\}$</td><td>Punctured complex plane</td></tr>
+                    <tr><td>$\hat{\mathbb{C}} = \mathbb{C}\cup\{\infty\}$</td><td>Riemann sphere</td></tr>
+                    <tr><td>$\mathbb{D} = \{z : |z| &lt; 1\}$</td><td>Open unit disk</td></tr>
+                    <tr><td>$\mathbb{H} = \{z : \mathrm{Im}\,z > 0\}$</td><td>Upper half-plane</td></tr>
+                    <tr><td>$\operatorname{Re} z,\;\operatorname{Im} z$</td><td>Real and imaginary parts of $z$</td></tr>
+                    <tr><td>$|z|$</td><td>Modulus: $\sqrt{x^2 + y^2}$</td></tr>
+                    <tr><td>$\arg z$</td><td>Argument (phase) of $z$, multi-valued</td></tr>
+                    <tr><td>$\operatorname{Arg} z$</td><td>Principal argument, $(-\pi, \pi]$</td></tr>
+                    <tr><td>$\bar{z}$</td><td>Complex conjugate: $x - iy$</td></tr>
+                    <tr><td>$f'(z)$</td><td>Complex derivative</td></tr>
+                    <tr><td>$\oint_\gamma f\,dz$</td><td>Contour integral along $\gamma$</td></tr>
+                    <tr><td>$n(\gamma, z_0)$</td><td>Winding number of $\gamma$ about $z_0$</td></tr>
+                    <tr><td>$\operatorname{Res}_{z=a} f$</td><td>Residue of $f$ at $z = a$</td></tr>
+                    <tr><td>$D(a,r)$</td><td>Open disk $\{z : |z - a| &lt; r\}$</td></tr>
+                    <tr><td>$\partial\Omega$</td><td>Boundary of domain $\Omega$</td></tr>
+                </tbody>
+            </table>
+
+            <!-- ═══ Key Results ═══ -->
+            <h2>Key Results</h2>
+
+            <div class="ref-results">
+                <div class="theorem">
+                    <p><strong>Euler's Formula.</strong>
+                    $e^{i\theta} = \cos\theta + i\sin\theta$</p>
+                </div>
+
+                <div class="theorem">
+                    <p><strong>Cauchy–Riemann Equations.</strong>
+                    $f = u + iv$ is analytic iff
+                    $\dfrac{\partial u}{\partial x} = \dfrac{\partial v}{\partial y}$ and
+                    $\dfrac{\partial u}{\partial y} = -\dfrac{\partial v}{\partial x}$.</p>
+                </div>
+
+                <div class="theorem">
+                    <p><strong>Cauchy's Integral Formula.</strong>
+                    If $f$ is analytic inside and on a simple closed contour $\gamma$, then
+                    $$f(a) = \frac{1}{2\pi i}\oint_\gamma \frac{f(z)}{z - a}\,dz$$</p>
+                </div>
+
+                <div class="theorem">
+                    <p><strong>Cauchy's Integral Formula for Derivatives.</strong>
+                    $$f^{(n)}(a) = \frac{n!}{2\pi i}\oint_\gamma \frac{f(z)}{(z-a)^{n+1}}\,dz$$</p>
+                </div>
+
+                <div class="theorem">
+                    <p><strong>Residue Theorem.</strong>
+                    If $f$ is analytic inside $\gamma$ except at isolated singularities $a_1, \ldots, a_n$, then
+                    $$\oint_\gamma f(z)\,dz = 2\pi i \sum_{k=1}^{n} n(\gamma, a_k)\operatorname{Res}_{z=a_k} f$$</p>
+                </div>
+
+                <div class="theorem">
+                    <p><strong>ML Inequality.</strong>
+                    If $|f(z)| \le M$ on $\gamma$ and $\text{length}(\gamma) = L$, then
+                    $\left|\oint_\gamma f\,dz\right| \le ML$.</p>
+                </div>
+
+                <div class="theorem">
+                    <p><strong>Liouville's Theorem.</strong>
+                    A bounded entire function is constant.</p>
+                </div>
+
+                <div class="theorem">
+                    <p><strong>Maximum Modulus Principle.</strong>
+                    If $f$ is analytic and non-constant on a domain $\Omega$, then $|f|$ has no local maximum in $\Omega$.</p>
+                </div>
+
+                <div class="theorem">
+                    <p><strong>Taylor's Theorem.</strong>
+                    If $f$ is analytic in $D(a, R)$, then
+                    $f(z) = \sum_{n=0}^{\infty} \frac{f^{(n)}(a)}{n!}(z-a)^n$ for $|z-a| &lt; R$.</p>
+                </div>
+
+                <div class="theorem">
+                    <p><strong>Laurent's Theorem.</strong>
+                    In the annulus $r &lt; |z-a| &lt; R$,
+                    $f(z) = \sum_{n=-\infty}^{\infty} c_n(z-a)^n$ where
+                    $c_n = \frac{1}{2\pi i}\oint \frac{f(\zeta)}{(\zeta - a)^{n+1}}\,d\zeta$.</p>
+                </div>
+
+                <div class="theorem">
+                    <p><strong>Argument Principle.</strong>
+                    If $f$ is meromorphic inside $\gamma$ with $Z$ zeros and $P$ poles (counted with multiplicity), then
+                    $\frac{1}{2\pi i}\oint_\gamma \frac{f'(z)}{f(z)}\,dz = Z - P$.</p>
+                </div>
+
+                <div class="theorem">
+                    <p><strong>Rouché's Theorem.</strong>
+                    If $|g(z)| &lt; |f(z)|$ on $\gamma$, then $f$ and $f + g$ have the same number of zeros inside $\gamma$.</p>
+                </div>
+
+                <div class="theorem">
+                    <p><strong>Schwarz Lemma.</strong>
+                    If $f:\mathbb{D}\to\mathbb{D}$ is analytic with $f(0)=0$, then $|f(z)|\le|z|$ and $|f'(0)|\le 1$.</p>
+                </div>
+
+                <div class="theorem">
+                    <p><strong>Riemann Mapping Theorem.</strong>
+                    Every simply connected proper subdomain of $\mathbb{C}$ is conformally equivalent to $\mathbb{D}$.</p>
+                </div>
+            </div>
+
+            <!-- ═══ Topics Covered ═══ -->
+            <h2>Topics by Chapter</h2>
+
+            <table class="ref-table">
+                <thead>
+                    <tr><th>Chapter</th><th>Topics</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1. Complex Numbers</td>
+                        <td>Rectangular &amp; polar forms, Euler's formula, roots of unity, triangle inequality, topology of $\mathbb{C}$</td>
+                    </tr>
+                    <tr>
+                        <td>2. Analytic Functions</td>
+                        <td>Differentiability, Cauchy–Riemann equations, harmonic functions, elementary functions, branch cuts</td>
+                    </tr>
+                    <tr>
+                        <td>3. Complex Integration</td>
+                        <td>Contour integrals, Cauchy–Goursat theorem, Cauchy integral formula, winding numbers, ML inequality</td>
+                    </tr>
+                    <tr>
+                        <td>4. Series &amp; Residues</td>
+                        <td>Taylor &amp; Laurent series, singularity classification, residue theorem, real integral computation</td>
+                    </tr>
+                    <tr>
+                        <td>5. Conformal Mappings</td>
+                        <td>Möbius transformations, cross-ratio, Schwarz lemma, Joukowski map, Riemann mapping theorem</td>
+                    </tr>
+                    <tr>
+                        <td>6. Applications</td>
+                        <td>Potential flow, electrostatics, Julia sets, Riemann surfaces</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- ═══ Prerequisites ═══ -->
+            <h2>Mathematical Prerequisites</h2>
+
+            <div class="remark">
+                <ul style="margin-top:8px; padding-left:1.2em; line-height:1.8;">
+                    <li>Single-variable calculus (derivatives, integrals, series)</li>
+                    <li>Multivariable calculus (partial derivatives, line integrals, Green's theorem)</li>
+                    <li>Linear algebra basics (matrices, determinants)</li>
+                    <li>Real analysis concepts (sequences, limits, continuity, uniform convergence)</li>
+                    <li>Basic topology ($\mathbb{R}^2$: open/closed sets, compactness, connectedness)</li>
+                </ul>
+            </div>
+
+            <!-- ═══ Textbooks ═══ -->
+            <h2>References &amp; Textbooks</h2>
+
+            <div class="ref-books">
+                <div class="ref-book">
+                    <div class="ref-book-title">Complex Analysis</div>
+                    <div class="ref-book-author">Elias M. Stein &amp; Rami Shakarchi</div>
+                    <div class="ref-book-detail">Princeton Lectures in Analysis II, Princeton University Press, 2003.</div>
+                    <div class="ref-book-note">Rigorous yet accessible. Excellent treatment of Cauchy's theory and conformal mappings.</div>
+                </div>
+                <div class="ref-book">
+                    <div class="ref-book-title">Complex Variables and Applications</div>
+                    <div class="ref-book-author">James Ward Brown &amp; Ruel V. Churchill</div>
+                    <div class="ref-book-detail">9th Edition, McGraw-Hill, 2013.</div>
+                    <div class="ref-book-note">The standard engineering-oriented textbook. Rich in worked examples and applications.</div>
+                </div>
+                <div class="ref-book">
+                    <div class="ref-book-title">Fundamentals of Complex Analysis</div>
+                    <div class="ref-book-author">Edward B. Saff &amp; Arthur D. Snider</div>
+                    <div class="ref-book-detail">3rd Edition, Pearson, 2003.</div>
+                    <div class="ref-book-note">Application-focused with excellent problems on fluid flow and electrostatics.</div>
+                </div>
+                <div class="ref-book">
+                    <div class="ref-book-title">Complex Analysis</div>
+                    <div class="ref-book-author">Lars V. Ahlfors</div>
+                    <div class="ref-book-detail">3rd Edition, McGraw-Hill, 1979.</div>
+                    <div class="ref-book-note">The classic graduate text. Geometric viewpoint throughout; proves Riemann mapping theorem elegantly.</div>
+                </div>
+                <div class="ref-book">
+                    <div class="ref-book-title">Visual Complex Analysis</div>
+                    <div class="ref-book-author">Tristan Needham</div>
+                    <div class="ref-book-detail">Oxford University Press, 1997.</div>
+                    <div class="ref-book-note">A deeply geometric and visual approach — the spiritual ancestor of this interactive site.</div>
+                </div>
+            </div>
+
+            <footer class="page-footer">
+                <p>Complex Analysis — Interactive Visualizations · <a href="../LICENSE">MIT License</a> · 2026</p>
+            </footer>
+        </div>
+    </main>
+
+    <script src="../assets/js/nav.js"></script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false},
+                {left: "\\[", right: "\\]", display: true},
+                {left: "\\(", right: "\\)", display: false}
+            ]
+        });
+    });
+    </script>
+</body>
+</html>

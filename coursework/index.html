@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coursework Portfolio — Complex Analysis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <button class="hamburger" aria-label="Open navigation" aria-expanded="false">☰</button>
+    <div class="overlay" aria-hidden="true"></div>
+    <nav class="sidebar" aria-label="Main navigation">
+        <div class="sidebar-brand"><h1>Complex Analysis</h1><div class="subtitle">Interactive Visualizations</div></div>
+        <div class="sidebar-nav" role="list"></div>
+        <div class="sidebar-footer">© 2026 · MIT License</div>
+    </nav>
+
+    <main class="main-content" id="main">
+        <div class="page-container">
+            <div class="breadcrumb">
+                <a href="../index.html">Home</a><span class="sep">/</span><span>Coursework</span>
+            </div>
+
+            <div class="chapter-header">
+                <div class="chapter-label">Portfolio</div>
+                <h1>Coursework</h1>
+                <p class="chapter-desc">
+                    A collection of homework solutions, project write-ups, and exploratory work
+                    produced during the complex analysis course. Each entry links to a PDF and
+                    summarises the topics covered.
+                </p>
+            </div>
+
+            <h2>Submitted Work</h2>
+
+            <div class="coursework-grid" id="courseworkGrid">
+                <!-- Populated dynamically from the entries below -->
+            </div>
+
+            <div class="section-divider"></div>
+
+            <h2>How to Add New Coursework</h2>
+
+            <div class="remark">
+                <ol style="margin-top:8px; padding-left:1.2em; line-height:1.8;">
+                    <li><strong>Copy the template folder:</strong> duplicate
+                        <code>coursework/template/</code> and rename it
+                        (e.g., <code>coursework/hw3/</code>).</li>
+                    <li><strong>Edit <code>data.json</code>:</strong> fill in the title, date,
+                        topics list, and description.</li>
+                    <li><strong>Add your PDF:</strong> place <code>solution.pdf</code> (or any name)
+                        in the same folder and update the <code>"pdf"</code> field.</li>
+                    <li><strong>Register the entry:</strong> add a new object to the
+                        <code>ENTRIES</code> array in the <code>&lt;script&gt;</code> block at the
+                        bottom of this page.</li>
+                </ol>
+            </div>
+
+            <h3>Template <code>data.json</code></h3>
+
+            <pre><code>{
+  "title": "Homework N — Topic Title",
+  "date": "2026-MM-DD",
+  "topics": ["Topic A", "Topic B"],
+  "description": "Brief summary of the problems solved.",
+  "pdf": "solution.pdf"
+}</code></pre>
+
+            <footer class="page-footer">
+                <p>Complex Analysis — Interactive Visualizations · <a href="../LICENSE">MIT License</a> · 2026</p>
+            </footer>
+        </div>
+    </main>
+
+    <script src="../assets/js/nav.js"></script>
+
+    <script>
+    /* ── Coursework entries ── */
+    const ENTRIES = [
+        {
+            title: "Homework 1 — Complex Arithmetic & Topology",
+            date: "2026-02-10",
+            topics: ["Complex numbers", "Polar form", "Open sets"],
+            description: "Problems on arithmetic in ℂ, polar↔rectangular conversions, proofs about open disks and connectedness.",
+            pdf: null
+        },
+        {
+            title: "Homework 2 — Analytic Functions",
+            date: "2026-02-24",
+            topics: ["Cauchy–Riemann", "Harmonic functions", "Branch cuts"],
+            description: "Verification of analyticity via Cauchy–Riemann, finding harmonic conjugates, branch selection for log.",
+            pdf: null
+        },
+        {
+            title: "Homework 3 — Contour Integration",
+            date: "2026-03-10",
+            topics: ["Cauchy's theorem", "Integral formula", "ML inequality"],
+            description: "Computing contour integrals directly and via Cauchy's integral formula. Applications of the ML bound.",
+            pdf: null
+        },
+        {
+            title: "Homework 4 — Series & Residues",
+            date: "2026-03-24",
+            topics: ["Taylor series", "Laurent series", "Residue theorem"],
+            description: "Finding Laurent expansions, classifying singularities, evaluating real integrals via residues.",
+            pdf: null
+        },
+        {
+            title: "Project — Conformal Mapping Gallery",
+            date: "2026-04-14",
+            topics: ["Möbius transformations", "Joukowski", "Schwarz–Christoffel"],
+            description: "An illustrated survey of conformal maps with visualizations and derivations of key mapping properties.",
+            pdf: null
+        }
+    ];
+
+    /* ── Render cards ── */
+    (function() {
+        const grid = document.getElementById('courseworkGrid');
+
+        ENTRIES.forEach((entry, idx) => {
+            const card = document.createElement('div');
+            card.className = 'coursework-card';
+            card.innerHTML = `
+                <div class="cw-card-header">
+                    <span class="cw-number">${idx + 1}</span>
+                    <span class="cw-date">${entry.date}</span>
+                </div>
+                <h3>${entry.title}</h3>
+                <div class="cw-topics">
+                    ${entry.topics.map(t => `<span class="cw-tag">${t}</span>`).join('')}
+                </div>
+                <p class="cw-desc">${entry.description}</p>
+                ${entry.pdf
+                    ? `<a class="btn btn-accent cw-link" href="${entry.pdf}" target="_blank" rel="noopener">View PDF ↗</a>`
+                    : `<span class="cw-pending">PDF not yet uploaded</span>`}
+            `;
+            grid.appendChild(card);
+        });
+    })();
+    </script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false},
+                {left: "\\[", right: "\\]", display: true},
+                {left: "\\(", right: "\\)", display: false}
+            ]
+        });
+    });
+    </script>
+</body>
+</html>

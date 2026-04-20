@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 4 — Series & Residues</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <button class="hamburger" aria-label="Open navigation" aria-expanded="false">☰</button>
+    <div class="overlay" aria-hidden="true"></div>
+    <nav class="sidebar" aria-label="Main navigation">
+        <div class="sidebar-brand"><h1>Complex Analysis</h1><div class="subtitle">Interactive Visualizations</div></div>
+        <div class="sidebar-nav" role="list"></div>
+        <div class="sidebar-footer">© 2026 · MIT License</div>
+    </nav>
+
+    <main class="main-content" id="main">
+        <div class="page-container">
+            <div class="breadcrumb">
+                <a href="../../index.html">Home</a><span class="sep">/</span><span>Chapter 4</span>
+            </div>
+
+            <div class="chapter-header">
+                <div class="chapter-label">Chapter 4</div>
+                <h1>Series &amp; Residues</h1>
+                <p class="chapter-desc">
+                    Taylor and Laurent series reveal the local structure of analytic functions.
+                    The residue theorem transforms contour integrals into algebraic computations.
+                </p>
+            </div>
+
+            <h2>4.1 Taylor Series</h2>
+
+            <div class="theorem">
+                <p><strong>(Taylor's Theorem)</strong> If $f$ is analytic in a disk $|z - z_0| < R$, then
+                $$f(z) = \sum_{n=0}^{\infty} \frac{f^{(n)}(z_0)}{n!}(z - z_0)^n$$
+                The series converges absolutely and uniformly on compact subsets of the disk.
+                The radius of convergence $R$ equals the distance from $z_0$ to the nearest singularity.</p>
+            </div>
+
+            <!-- ═══ SIM 1: Taylor Series Convergence ═══ -->
+            <div class="sim-card">
+                <div class="sim-card-header">
+                    <h3>Taylor Series Convergence</h3>
+                    <span class="sim-badge">Interactive</span>
+                </div>
+                <div class="sim-canvas-wrap">
+                    <canvas id="taylorSim" width="800" height="600" aria-label="Taylor series convergence — adjust the number of terms to see partial sums approaching the function"></canvas>
+                </div>
+                <div class="sim-readout">
+                    <div class="readout-item"><span class="readout-label">Function:</span><span class="readout-value" id="taylorFuncLabel">exp(z)</span></div>
+                    <div class="readout-item"><span class="readout-label">Terms (N):</span><span class="readout-value" id="taylorTermsVal">5</span></div>
+                    <div class="readout-item"><span class="readout-label">Radius:</span><span class="readout-value" id="taylorRadius">∞</span></div>
+                </div>
+                <div class="sim-controls">
+                    <button class="btn" id="taylorPlay" aria-label="Animate terms increasing">▶ Play</button>
+                    <button class="btn" id="taylorReset" aria-label="Reset Taylor series">↺ Reset</button>
+                    <div class="control-group">
+                        <label for="taylorFunc">f(z) =</label>
+                        <select id="taylorFunc" aria-label="Select function for Taylor expansion">
+                            <option value="exp">exp(z) — R = ∞</option>
+                            <option value="sin">sin(z) — R = ∞</option>
+                            <option value="cos">cos(z) — R = ∞</option>
+                            <option value="geo">1/(1−z) — R = 1</option>
+                            <option value="log1p">log(1+z) — R = 1</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="taylorN">Terms:</label>
+                        <input type="range" id="taylorN" min="1" max="30" value="5" aria-label="Number of Taylor series terms">
+                        <span id="taylorNDisplay" style="font-family:var(--font-code);font-size:0.82rem;color:var(--gold);min-width:24px;">5</span>
+                    </div>
+                </div>
+                <details class="sim-info">
+                    <summary>ℹ What to observe</summary>
+                    <div class="info-content">
+                        <p>The domain coloring shows the true function. The overlay contour (dashed white circle)
+                        marks the radius of convergence. Inside this circle, the partial sum (shown as colored dots
+                        on the real axis cross-section) converges to the function. Outside, it diverges wildly.
+                        Press Play to animate the terms increasing one by one.</p>
+                    </div>
+                </details>
+            </div>
+
+            <h2>4.2 Laurent Series</h2>
+
+            <div class="theorem">
+                <p><strong>(Laurent's Theorem)</strong> If $f$ is analytic in the annulus $r < |z - z_0| < R$, then
+                $$f(z) = \sum_{n=-\infty}^{\infty} a_n (z - z_0)^n$$
+                where $a_n = \frac{1}{2\pi i}\oint_\gamma \frac{f(\zeta)}{(\zeta - z_0)^{n+1}}\,d\zeta$.
+                The terms with $n < 0$ form the <strong>principal part</strong>.</p>
+            </div>
+
+            <h2>4.3 Classification of Singularities</h2>
+
+            <div class="definition">
+                <p>An isolated singularity $z_0$ of $f$ is:
+                <ul style="margin-top:8px;">
+                    <li><strong>Removable</strong> if the Laurent series has no principal part ($a_n = 0$ for $n < 0$)</li>
+                    <li>A <strong>pole of order $m$</strong> if $a_{-m} \neq 0$ and $a_n = 0$ for $n < -m$</li>
+                    <li>An <strong>essential singularity</strong> if infinitely many $a_n \neq 0$ for $n < 0$</li>
+                </ul></p>
+            </div>
+
+            <div class="theorem">
+                <p><strong>(Casorati–Weierstrass)</strong> Near an essential singularity, $f$ takes values
+                arbitrarily close to any complex number. (Picard's theorem strengthens this: $f$ takes
+                every value, with at most one exception, infinitely often.)</p>
+            </div>
+
+            <h2>4.4 The Residue Theorem</h2>
+
+            <div class="definition">
+                <p>The <strong>residue</strong> of $f$ at an isolated singularity $z_0$ is
+                $$\text{Res}(f, z_0) = a_{-1} = \frac{1}{2\pi i}\oint_\gamma f(z)\,dz$$
+                where $\gamma$ is a small circle around $z_0$.</p>
+            </div>
+
+            <div class="theorem">
+                <p><strong>(Residue Theorem)</strong> If $f$ is analytic inside and on a simple closed contour
+                $\gamma$ except at isolated singularities $z_1, \ldots, z_k$ inside $\gamma$, then
+                $$\oint_\gamma f(z)\,dz = 2\pi i \sum_{j=1}^{k} \text{Res}(f, z_j)$$</p>
+            </div>
+
+            <!-- ═══ SIM 2: Pole/Zero Visualizer ═══ -->
+            <div class="sim-card">
+                <div class="sim-card-header">
+                    <h3>Pole &amp; Zero Visualizer</h3>
+                    <span class="sim-badge">Interactive</span>
+                </div>
+                <div class="sim-canvas-wrap">
+                    <canvas id="poleSim" width="700" height="700" aria-label="Pole and zero visualizer using domain coloring — poles and zeros appear as color vortices"></canvas>
+                </div>
+                <div class="sim-readout">
+                    <div class="readout-item"><span class="readout-label">f(z) =</span><span class="readout-value" id="poleFuncLabel">1/(z²+1)</span></div>
+                    <div class="readout-item"><span class="readout-label">Hover z =</span><span class="readout-value" id="poleZ">—</span></div>
+                    <div class="readout-item"><span class="readout-label">f(z) =</span><span class="readout-value" id="poleFz">—</span></div>
+                    <div class="readout-item"><span class="readout-label">|f(z)| =</span><span class="readout-value" id="poleMod">—</span></div>
+                </div>
+                <div class="sim-controls">
+                    <button class="btn" id="poleReset" aria-label="Reset pole visualizer">↺ Reset</button>
+                    <div class="control-group">
+                        <label for="poleFuncSel">f(z) =</label>
+                        <select id="poleFuncSel" aria-label="Select rational function">
+                            <option value="a">1/(z²+1) — poles at ±i</option>
+                            <option value="b">(z²−1)/(z³) — pole at 0, zeros at ±1</option>
+                            <option value="c">tan(z) — poles at π/2+nπ</option>
+                            <option value="d">z·exp(1/z) — essential sing. at 0</option>
+                            <option value="e">(z−1)/(z²+z+1)</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="poleZoom">Zoom:</label>
+                        <input type="range" id="poleZoom" min="1" max="8" step="0.5" value="3" aria-label="Zoom level">
+                    </div>
+                </div>
+                <details class="sim-info">
+                    <summary>ℹ What to observe</summary>
+                    <div class="info-content">
+                        <p><strong>Zeros</strong> appear as points where all colors converge and brightness drops
+                        (dark vortex). <strong>Poles</strong> appear as bright white/colored vortices where the
+                        brightness explodes. <strong>Essential singularities</strong> show infinitely intricate
+                        color patterns. Count the number of times each color appears around a singularity to
+                        determine the order.</p>
+                    </div>
+                </details>
+            </div>
+
+            <h2>4.5 Computing Residues</h2>
+
+            <div class="remark">
+                <p>Practical formulas for residues:
+                <ul style="margin-top:8px;">
+                    <li><strong>Simple pole:</strong> $\text{Res}(f, z_0) = \lim_{z \to z_0}(z - z_0)f(z)$</li>
+                    <li><strong>Pole of order $m$:</strong> $\text{Res}(f, z_0) = \frac{1}{(m-1)!}\lim_{z \to z_0}\frac{d^{m-1}}{dz^{m-1}}\left[(z - z_0)^m f(z)\right]$</li>
+                    <li><strong>$p/q$ rule:</strong> If $f = p/q$ with $q(z_0)=0$, $q'(z_0)\neq 0$, then $\text{Res}(f,z_0) = p(z_0)/q'(z_0)$</li>
+                </ul></p>
+            </div>
+
+            <div class="section-divider"></div>
+            <h2>Key Takeaways</h2>
+            <div class="key-concepts">
+                <div class="key-concept">
+                    <h4>Taylor Series</h4>
+                    <p>Analytic functions equal their Taylor series in the largest disk free of singularities.</p>
+                </div>
+                <div class="key-concept">
+                    <h4>Laurent Series</h4>
+                    <p>Extends Taylor series to annular regions; the principal part reveals the singularity type.</p>
+                </div>
+                <div class="key-concept">
+                    <h4>Residue Theorem</h4>
+                    <p>$\oint f\,dz = 2\pi i \sum \text{Res}(f, z_k)$ — reduces integration to algebra.</p>
+                </div>
+                <div class="key-concept">
+                    <h4>Singularity Zoo</h4>
+                    <p>Removable (bounded) → pole (blows up) → essential (wild, Picard's theorem).</p>
+                </div>
+            </div>
+
+            <footer class="page-footer">
+                <p>Complex Analysis — Interactive Visualizations · <a href="../../LICENSE">MIT License</a> · 2026</p>
+            </footer>
+        </div>
+    </main>
+
+    <script src="../../assets/js/utils/complex-math.js"></script>
+    <script src="../../assets/js/utils/colormap.js"></script>
+    <script src="../../assets/js/nav.js"></script>
+
+    <script>
+    /* ══════════════════════ SIM 1: Taylor Series ══════════════════════ */
+    (function() {
+        const canvas = document.getElementById('taylorSim');
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width, H = canvas.height;
+        let funcKey = 'exp';
+        let N = 5;
+        let playing = false;
+        let animId, lastTime = 0;
+
+        const funcs = {
+            exp: { fn: z => z.exp(), radius: Infinity, label: 'exp(z)', coeffs: n => 1 / factorial(n) },
+            sin: { fn: z => z.sin(), radius: Infinity, label: 'sin(z)', coeffs: n => n % 2 === 0 ? 0 : ((n % 4 === 1 ? 1 : -1) / factorial(n)) },
+            cos: { fn: z => z.cos(), radius: Infinity, label: 'cos(z)', coeffs: n => n % 2 === 1 ? 0 : ((n % 4 === 0 ? 1 : -1) / factorial(n)) },
+            geo: { fn: z => Complex.one().div(Complex.one().sub(z)), radius: 1, label: '1/(1−z)', coeffs: n => 1 },
+            log1p: { fn: z => z.add(Complex.one()).log(), radius: 1, label: 'log(1+z)', coeffs: n => n === 0 ? 0 : (n % 2 === 1 ? 1 : -1) / n },
+        };
+
+        function factorial(n) {
+            let r = 1;
+            for (let i = 2; i <= n; i++) r *= i;
+            return r;
+        }
+
+        function taylorPartialSum(z, coeffFn, nTerms) {
+            let sum = Complex.zero();
+            let zn = Complex.one();
+            for (let n = 0; n < nTerms; n++) {
+                const c = coeffFn(n);
+                if (c !== 0) sum = sum.add(zn.mul(c));
+                zn = zn.mul(z);
+            }
+            return sum;
+        }
+
+        function draw() {
+            ctx.fillStyle = '#050510';
+            ctx.fillRect(0, 0, W, H);
+
+            const range = 4;
+            const f = funcs[funcKey];
+
+            /* Draw real-axis cross-section */
+            const plotH = H;
+            const plotW = W;
+            const yRange = 4;
+
+            function toScreenPlot(x, y) {
+                return {
+                    px: (x + range) / (2 * range) * plotW,
+                    py: plotH / 2 - (y / yRange) * (plotH / 2)
+                };
+            }
+
+            /* Grid */
+            ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+            ctx.lineWidth = 1;
+            for (let x = -Math.floor(range); x <= Math.floor(range); x++) {
+                const { px } = toScreenPlot(x, 0);
+                ctx.beginPath(); ctx.moveTo(px, 0); ctx.lineTo(px, plotH); ctx.stroke();
+            }
+            for (let y = -Math.floor(yRange); y <= Math.floor(yRange); y++) {
+                const { py } = toScreenPlot(0, y);
+                ctx.beginPath(); ctx.moveTo(0, py); ctx.lineTo(plotW, py); ctx.stroke();
+            }
+
+            /* Axes */
+            ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+            ctx.lineWidth = 1.5;
+            const { px: ax } = toScreenPlot(0, 0);
+            const { py: ay } = toScreenPlot(0, 0);
+            ctx.beginPath(); ctx.moveTo(ax, 0); ctx.lineTo(ax, plotH); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(0, ay); ctx.lineTo(plotW, ay); ctx.stroke();
+
+            /* Radius of convergence */
+            if (isFinite(f.radius)) {
+                const { px: leftR } = toScreenPlot(-f.radius, 0);
+                const { px: rightR } = toScreenPlot(f.radius, 0);
+                ctx.strokeStyle = 'rgba(240, 192, 64, 0.4)';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([8, 4]);
+                ctx.beginPath(); ctx.moveTo(leftR, 0); ctx.lineTo(leftR, plotH); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(rightR, 0); ctx.lineTo(rightR, plotH); ctx.stroke();
+                ctx.setLineDash([]);
+
+                ctx.fillStyle = 'rgba(240, 192, 64, 0.3)';
+                ctx.font = '12px JetBrains Mono, monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText('R = ' + f.radius, rightR, 20);
+            }
+
+            /* True function curve (real part along real axis) */
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(124, 108, 240, 0.8)';
+            ctx.lineWidth = 2.5;
+            const steps = 400;
+            for (let i = 0; i <= steps; i++) {
+                const x = -range + (i / steps) * 2 * range;
+                const z = new Complex(x, 0);
+                let fz;
+                try { fz = f.fn(z); } catch(e) { continue; }
+                if (!isFinite(fz.re) || Math.abs(fz.re) > yRange * 2) { ctx.moveTo(-1, -1); continue; }
+                const { px, py } = toScreenPlot(x, fz.re);
+                if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+
+            /* Partial sum curve */
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(233, 69, 96, 0.9)';
+            ctx.lineWidth = 2;
+            for (let i = 0; i <= steps; i++) {
+                const x = -range + (i / steps) * 2 * range;
+                const z = new Complex(x, 0);
+                const psum = taylorPartialSum(z, f.coeffs, N);
+                if (!isFinite(psum.re) || Math.abs(psum.re) > yRange * 2) { ctx.moveTo(-1, -1); continue; }
+                const { px, py } = toScreenPlot(x, psum.re);
+                if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+
+            /* Legend */
+            ctx.fillStyle = 'rgba(124, 108, 240, 0.8)';
+            ctx.font = '13px EB Garamond, serif';
+            ctx.textAlign = 'left';
+            ctx.fillText('── f(z) (true)', 12, 24);
+            ctx.fillStyle = 'rgba(233, 69, 96, 0.9)';
+            ctx.fillText('── Partial sum (N = ' + N + ')', 12, 42);
+
+            /* Update readouts */
+            document.getElementById('taylorFuncLabel').textContent = f.label;
+            document.getElementById('taylorTermsVal').textContent = N;
+            document.getElementById('taylorRadius').textContent = isFinite(f.radius) ? f.radius : '∞';
+        }
+
+        document.getElementById('taylorN').addEventListener('input', e => {
+            N = parseInt(e.target.value);
+            document.getElementById('taylorNDisplay').textContent = N;
+            if (!playing) draw();
+        });
+
+        document.getElementById('taylorFunc').addEventListener('change', e => {
+            funcKey = e.target.value;
+            if (!playing) draw();
+        });
+
+        document.getElementById('taylorPlay').addEventListener('click', () => {
+            playing = !playing;
+            document.getElementById('taylorPlay').textContent = playing ? '⏸ Pause' : '▶ Play';
+            if (playing) {
+                N = 1;
+                document.getElementById('taylorN').value = N;
+                document.getElementById('taylorNDisplay').textContent = N;
+                lastTime = 0;
+                function animate(ts) {
+                    if (!playing) return;
+                    const dt = lastTime ? (ts - lastTime) / 1000 : 0;
+                    lastTime = ts;
+                    if (dt > 0.4 || N === 1) {
+                        /* Increment every ~0.4s */
+                    }
+                    draw();
+                    if (N < 30) {
+                        setTimeout(() => {
+                            if (!playing) return;
+                            N++;
+                            document.getElementById('taylorN').value = N;
+                            document.getElementById('taylorNDisplay').textContent = N;
+                            animId = requestAnimationFrame(animate);
+                        }, 400);
+                    } else {
+                        playing = false;
+                        document.getElementById('taylorPlay').textContent = '▶ Play';
+                    }
+                }
+                animId = requestAnimationFrame(animate);
+            }
+        });
+
+        document.getElementById('taylorReset').addEventListener('click', () => {
+            playing = false;
+            document.getElementById('taylorPlay').textContent = '▶ Play';
+            N = 5;
+            document.getElementById('taylorN').value = 5;
+            document.getElementById('taylorNDisplay').textContent = 5;
+            funcKey = 'exp';
+            document.getElementById('taylorFunc').value = 'exp';
+            draw();
+        });
+
+        draw();
+    })();
+
+    /* ══════════════════════ SIM 2: Pole/Zero Visualizer ══════════════════════ */
+    (function() {
+        const canvas = document.getElementById('poleSim');
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width, H = canvas.height;
+        let zoom = 3;
+        let funcKey = 'a';
+
+        const poleFuncs = {
+            a: z => Complex.one().div(z.mul(z).add(Complex.one())),
+            b: z => z.mul(z).sub(Complex.one()).div(z.mul(z).mul(z)),
+            c: z => z.tan(),
+            d: z => z.mul(Complex.one().div(z).exp()),
+            e: z => z.sub(Complex.one()).div(z.mul(z).add(z).add(Complex.one())),
+        };
+
+        function render() {
+            const imageData = ctx.createImageData(W, H);
+            const func = poleFuncs[funcKey];
+            renderDomainColoring(imageData, func, -zoom, zoom, -zoom, zoom);
+            ctx.putImageData(imageData, 0, 0);
+        }
+
+        canvas.addEventListener('pointermove', e => {
+            const rect = canvas.getBoundingClientRect();
+            const sx = (e.clientX - rect.left) / rect.width;
+            const sy = (e.clientY - rect.top) / rect.height;
+            const z = new Complex(-zoom + sx * 2 * zoom, zoom - sy * 2 * zoom);
+            let fz;
+            try { fz = poleFuncs[funcKey](z); } catch(err) { fz = Complex.zero(); }
+            document.getElementById('poleZ').textContent = z.toString(2);
+            document.getElementById('poleFz').textContent = fz.toString(2);
+            document.getElementById('poleMod').textContent = fz.abs().toFixed(3);
+        });
+
+        document.getElementById('poleFuncSel').addEventListener('change', e => {
+            funcKey = e.target.value;
+            document.getElementById('poleFuncLabel').textContent = e.target.options[e.target.selectedIndex].text;
+            render();
+        });
+
+        document.getElementById('poleZoom').addEventListener('input', e => {
+            zoom = parseFloat(e.target.value);
+            render();
+        });
+
+        document.getElementById('poleReset').addEventListener('click', () => {
+            funcKey = 'a';
+            zoom = 3;
+            document.getElementById('poleFuncSel').value = 'a';
+            document.getElementById('poleZoom').value = 3;
+            render();
+        });
+
+        render();
+    })();
+    </script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false},
+                {left: "\\[", right: "\\]", display: true},
+                {left: "\\(", right: "\\)", display: false}
+            ]
+        });
+    });
+    </script>
+</body>
+</html>
