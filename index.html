@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complex Analysis — Interactive Visualizations</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <!-- Hamburger -->
+    <button class="hamburger" aria-label="Open navigation" aria-expanded="false">☰</button>
+    <div class="overlay" aria-hidden="true"></div>
+
+    <!-- Sidebar -->
+    <nav class="sidebar" aria-label="Main navigation">
+        <div class="sidebar-brand">
+            <h1>Complex Analysis</h1>
+            <div class="subtitle">Interactive Visualizations</div>
+        </div>
+        <div class="sidebar-nav" role="list"></div>
+        <div class="sidebar-footer">© 2026 · MIT License</div>
+    </nav>
+
+    <!-- Main -->
+    <main class="main-content" id="main">
+        <!-- Hero -->
+        <section class="hero">
+            <canvas class="hero-bg-canvas" id="heroCanvas" aria-hidden="true"></canvas>
+            <div class="hero-content fade-in">
+                <h1>Complex Analysis</h1>
+                <p class="hero-subtitle">An Interactive Journey Through the Complex Plane</p>
+
+                <div class="badges fade-in fade-in-d1">
+                    <img src="https://img.shields.io/badge/Live%20Site-GitHub%20Pages-violet?style=for-the-badge&logo=github" alt="GitHub Pages">
+                    <img src="https://img.shields.io/badge/License-MIT-emerald.svg?style=for-the-badge" alt="MIT License">
+                    <img src="https://img.shields.io/badge/Chapters-6-blue?style=for-the-badge" alt="6 Chapters">
+                    <img src="https://img.shields.io/badge/Math-KaTeX-orange?style=for-the-badge" alt="KaTeX Math">
+                    <img src="https://img.shields.io/badge/3D-Three.js-white?style=for-the-badge" alt="Three.js 3D">
+                </div>
+
+                <div class="cta-group fade-in fade-in-d2">
+                    <a href="chapters/1-complex-numbers/index.html" class="btn btn-accent" style="padding:12px 28px;font-size:1rem;">
+                        ▶ Begin Chapter 1
+                    </a>
+                    <a href="reference/index.html" class="btn btn-gold" style="padding:12px 28px;font-size:1rem;">
+                        📖 Reference
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <div class="page-container">
+            <!-- About -->
+            <section class="fade-in fade-in-d3">
+                <h2>What is this?</h2>
+                <p>
+                    This is a fully interactive, browser-based textbook companion for <strong>Complex Analysis</strong>
+                    (also known as the theory of functions of a complex variable). Every major concept — from the geometry
+                    of complex arithmetic to the residue theorem and conformal mappings — comes with real-time
+                    simulations you can manipulate, pause, and explore at your own pace.
+                </p>
+                <p>
+                    The site is designed for undergraduate mathematics, physics, and engineering students taking a first
+                    course in complex analysis. No server or build step is required: every visualization runs directly in
+                    your browser using Canvas 2D, Three.js for 3D surfaces, and KaTeX for beautiful mathematical
+                    typesetting.
+                </p>
+                <p>
+                    Each chapter pairs rigorous definitions and theorems with interactive explorations. Drag points on the
+                    complex plane, watch Taylor series converge term by term, explore domain colorings of analytic
+                    functions, and build geometric intuition for Cauchy's integral formula — all without leaving your
+                    browser.
+                </p>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <!-- Chapter Overview -->
+            <section>
+                <h2>Chapter Overview</h2>
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>Key Topics</th>
+                            <th>Sims</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td><a href="chapters/1-complex-numbers/index.html">Complex Numbers &amp; the Complex Plane</a></td>
+                            <td>Arithmetic, polar form, Euler's formula, roots of unity, topology</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><a href="chapters/2-analytic-functions/index.html">Analytic Functions</a></td>
+                            <td>Cauchy–Riemann equations, domain coloring, elementary functions, branch cuts</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td><a href="chapters/3-complex-integration/index.html">Complex Integration</a></td>
+                            <td>Contour integrals, Cauchy–Goursat, Cauchy integral formula, winding numbers</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td><a href="chapters/4-series-residues/index.html">Series &amp; Residues</a></td>
+                            <td>Taylor series, Laurent series, singularities, residue theorem</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><a href="chapters/5-conformal-mappings/index.html">Conformal Mappings</a></td>
+                            <td>Möbius transformations, Joukowski, Schwarz lemma, Riemann mapping</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td><a href="chapters/6-applications/index.html">Applications</a></td>
+                            <td>Fluid flow, electrostatics, Riemann surfaces, Julia sets</td>
+                            <td>3</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Chapter cards -->
+            <div class="chapter-grid">
+                <a href="chapters/1-complex-numbers/index.html" class="chapter-card fade-in">
+                    <div class="card-num">01</div>
+                    <h3>Complex Numbers &amp; the Complex Plane</h3>
+                    <p>Visualize arithmetic, polar form, and roots of unity with interactive drag-and-drop on the Argand diagram.</p>
+                    <div class="card-meta"><span>3 simulations</span><span>~30 min</span></div>
+                </a>
+                <a href="chapters/2-analytic-functions/index.html" class="chapter-card fade-in fade-in-d1">
+                    <div class="card-num">02</div>
+                    <h3>Analytic Functions</h3>
+                    <p>Explore domain coloring, the Cauchy–Riemann equations, and how analytic functions transform the plane.</p>
+                    <div class="card-meta"><span>3 simulations</span><span>~35 min</span></div>
+                </a>
+                <a href="chapters/3-complex-integration/index.html" class="chapter-card fade-in fade-in-d2">
+                    <div class="card-num">03</div>
+                    <h3>Complex Integration</h3>
+                    <p>Trace contour integrals, verify Cauchy's theorem interactively, and compute winding numbers by drawing curves.</p>
+                    <div class="card-meta"><span>2 simulations</span><span>~25 min</span></div>
+                </a>
+                <a href="chapters/4-series-residues/index.html" class="chapter-card fade-in fade-in-d3">
+                    <div class="card-num">04</div>
+                    <h3>Series &amp; Residues</h3>
+                    <p>Watch Taylor and Laurent series converge, locate poles, and apply the residue theorem step by step.</p>
+                    <div class="card-meta"><span>2 simulations</span><span>~30 min</span></div>
+                </a>
+                <a href="chapters/5-conformal-mappings/index.html" class="chapter-card fade-in fade-in-d4">
+                    <div class="card-num">05</div>
+                    <h3>Conformal Mappings</h3>
+                    <p>Manipulate Möbius transformations, generate Joukowski airfoils, and watch grids deform conformally.</p>
+                    <div class="card-meta"><span>2 simulations</span><span>~30 min</span></div>
+                </a>
+                <a href="chapters/6-applications/index.html" class="chapter-card fade-in fade-in-d5">
+                    <div class="card-num">06</div>
+                    <h3>Applications</h3>
+                    <p>See complex analysis at work: potential flow, Julia sets, and 3D Riemann surfaces rendered with Three.js.</p>
+                    <div class="card-meta"><span>3 simulations</span><span>~40 min</span></div>
+                </a>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <!-- Quick links -->
+            <section>
+                <h2>Quick Links</h2>
+                <div class="key-concepts">
+                    <a href="coursework/index.html" class="key-concept" style="text-decoration:none">
+                        <h4>📝 Coursework Portfolio</h4>
+                        <p>Assignments, tutorials, and practice problems with PDF solutions.</p>
+                    </a>
+                    <a href="reference/index.html" class="key-concept" style="text-decoration:none">
+                        <h4>📖 Notation &amp; Reference</h4>
+                        <p>Complete symbol table, theorem index, and textbook citations.</p>
+                    </a>
+                    <div class="key-concept">
+                        <h4>🚀 Run Locally</h4>
+                        <p>Just open <code>index.html</code> — no server, npm, or build step needed.</p>
+                    </div>
+                    <div class="key-concept">
+                        <h4>📐 Prerequisites</h4>
+                        <p>Calculus I–III, basic linear algebra, and familiarity with proofs.</p>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="page-footer">
+                <p>Complex Analysis — Interactive Visualizations · <a href="LICENSE">MIT License</a> · 2026</p>
+            </footer>
+        </div>
+    </main>
+
+    <!-- Nav script -->
+    <script src="assets/js/utils/complex-math.js"></script>
+    <script src="assets/js/nav.js"></script>
+
+    <!-- Hero background animation -->
+    <script>
+    (function() {
+        const canvas = document.getElementById('heroCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        let W, H, time = 0, animId;
+
+        function resize() {
+            const hero = canvas.parentElement;
+            W = canvas.width = hero.clientWidth;
+            H = canvas.height = hero.clientHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        function draw(ts) {
+            time = ts * 0.001;
+            ctx.fillStyle = 'rgba(10, 10, 26, 0.15)';
+            ctx.fillRect(0, 0, W, H);
+
+            const cx = W / 2, cy = H / 2;
+            const scale = Math.min(W, H) * 0.35;
+
+            /* Draw rotating complex exponential spirals */
+            for (let s = 0; s < 3; s++) {
+                ctx.beginPath();
+                const hue = [270, 45, 170][s];
+                ctx.strokeStyle = `hsla(${hue}, 70%, 60%, 0.35)`;
+                ctx.lineWidth = 1.5;
+                const phaseOff = (s * 2 * Math.PI) / 3;
+                for (let i = 0; i <= 300; i++) {
+                    const t = (i / 300) * 4 * Math.PI;
+                    const r = 0.1 + 0.22 * t / (4 * Math.PI);
+                    const angle = t + time * 0.5 + phaseOff;
+                    const x = cx + scale * r * Math.cos(angle);
+                    const y = cy + scale * r * Math.sin(angle);
+                    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+            }
+
+            /* Draw dots at roots of unity, slowly rotating */
+            for (let n = 3; n <= 8; n++) {
+                const ringR = scale * (0.15 + (n - 3) * 0.13);
+                for (let k = 0; k < n; k++) {
+                    const angle = (2 * Math.PI * k) / n + time * (0.3 / n);
+                    const x = cx + ringR * Math.cos(angle);
+                    const y = cy + ringR * Math.sin(angle);
+                    const alpha = 0.15 + 0.15 * Math.sin(time + k);
+                    ctx.beginPath();
+                    ctx.arc(x, y, 2.5, 0, 2 * Math.PI);
+                    ctx.fillStyle = `rgba(240, 192, 64, ${alpha})`;
+                    ctx.fill();
+                }
+            }
+
+            animId = requestAnimationFrame(draw);
+        }
+        animId = requestAnimationFrame(draw);
+    })();
+    </script>
+
+    <!-- KaTeX auto-render -->
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false},
+                {left: "\\[", right: "\\]", display: true},
+                {left: "\\(", right: "\\)", display: false}
+            ]
+        });
+    });
+    </script>
+</body>
+</html>

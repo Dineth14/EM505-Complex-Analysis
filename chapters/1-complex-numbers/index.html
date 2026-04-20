@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 1 — Complex Numbers & the Complex Plane</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <button class="hamburger" aria-label="Open navigation" aria-expanded="false">☰</button>
+    <div class="overlay" aria-hidden="true"></div>
+
+    <nav class="sidebar" aria-label="Main navigation">
+        <div class="sidebar-brand">
+            <h1>Complex Analysis</h1>
+            <div class="subtitle">Interactive Visualizations</div>
+        </div>
+        <div class="sidebar-nav" role="list"></div>
+        <div class="sidebar-footer">© 2026 · MIT License</div>
+    </nav>
+
+    <main class="main-content" id="main">
+        <div class="page-container">
+            <div class="breadcrumb">
+                <a href="../../index.html">Home</a>
+                <span class="sep">/</span>
+                <span>Chapter 1</span>
+            </div>
+
+            <div class="chapter-header">
+                <div class="chapter-label">Chapter 1</div>
+                <h1>Complex Numbers &amp; the Complex Plane</h1>
+                <p class="chapter-desc">
+                    We begin our journey by extending the real numbers to the complex plane.
+                    Here you will build geometric intuition for complex arithmetic, polar representations,
+                    and the elegant roots of unity.
+                </p>
+            </div>
+
+            <!-- ═══ §1.1 DEFINITIONS ═══ -->
+            <h2>1.1 The Complex Number System</h2>
+
+            <div class="definition">
+                <p>A <strong>complex number</strong> is an expression of the form $z = x + iy$, where
+                $x, y \in \mathbb{R}$ and $i^2 = -1$. We write $\text{Re}(z) = x$ and $\text{Im}(z) = y$.
+                The set of all complex numbers is $\mathbb{C}$.</p>
+            </div>
+
+            <p>Complex numbers can be added and multiplied using the rules of algebra together with $i^2 = -1$:</p>
+            <div class="math-block">
+                $$(a + bi) + (c + di) = (a+c) + (b+d)i$$
+                $$(a + bi)(c + di) = (ac - bd) + (ad + bc)i$$
+            </div>
+
+            <p>The <strong>modulus</strong> (absolute value) and <strong>argument</strong> (angle) of $z = x + iy$ are:</p>
+            <div class="math-block">
+                $$|z| = \sqrt{x^2 + y^2}, \qquad \arg(z) = \arctan\!\left(\frac{y}{x}\right)$$
+            </div>
+
+            <div class="theorem">
+                <p><strong>(Euler's Formula)</strong> For any $\theta \in \mathbb{R}$,
+                $$e^{i\theta} = \cos\theta + i\sin\theta$$
+                Hence every complex number can be written in <em>polar form</em>: $z = r e^{i\theta}$ where $r = |z|$ and $\theta = \arg(z)$.</p>
+            </div>
+
+            <p>This connects the exponential function to trigonometry and reveals that multiplication by
+            $e^{i\theta}$ is a rotation by angle $\theta$.</p>
+
+            <!-- ═══ SIM 1: Complex Plane Explorer ═══ -->
+            <h2>1.2 Interactive Complex Plane</h2>
+            <p>Click or drag on the plane below to place a complex number $z$.
+            Both the rectangular form $z = x + iy$ and polar form $z = re^{i\theta}$ are displayed in real time.</p>
+
+            <div class="sim-card">
+                <div class="sim-card-header">
+                    <h3>Complex Plane Explorer</h3>
+                    <span class="sim-badge">Interactive</span>
+                </div>
+                <div class="sim-canvas-wrap">
+                    <canvas id="planeSim" width="800" height="600" aria-label="Interactive complex plane — click or drag to place a complex number and see its rectangular and polar forms"></canvas>
+                </div>
+                <div class="sim-readout" id="planeReadout">
+                    <div class="readout-item"><span class="readout-label">z =</span><span class="readout-value" id="planeZ">0 + 0i</span></div>
+                    <div class="readout-item"><span class="readout-label">|z| =</span><span class="readout-value" id="planeMod">0</span></div>
+                    <div class="readout-item"><span class="readout-label">arg(z) =</span><span class="readout-value" id="planeArg">0</span></div>
+                    <div class="readout-item"><span class="readout-label">Polar:</span><span class="readout-value" id="planePolar">0·e^(0i)</span></div>
+                </div>
+                <div class="sim-controls">
+                    <button class="btn" id="planeReset" aria-label="Reset complex plane">↺ Reset</button>
+                </div>
+                <details class="sim-info">
+                    <summary>ℹ What to observe</summary>
+                    <div class="info-content">
+                        <p>Notice how the angle $\theta$ sweeps counter-clockwise from the positive real axis.
+                        The modulus $|z|$ is the distance from the origin. Try placing points on the unit circle
+                        ($|z| = 1$) and see how the argument alone determines the position.</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- ═══ §1.3 ARITHMETIC ═══ -->
+            <h2>1.3 Complex Arithmetic — Geometric View</h2>
+
+            <p>Addition of complex numbers follows the <strong>parallelogram rule</strong>: $z_1 + z_2$ is the
+            diagonal of the parallelogram formed by the vectors to $z_1$ and $z_2$.</p>
+
+            <p>Multiplication is best understood in polar form. If $z_1 = r_1 e^{i\theta_1}$ and
+            $z_2 = r_2 e^{i\theta_2}$, then:</p>
+            <div class="math-block">
+                $$z_1 z_2 = r_1 r_2 \, e^{i(\theta_1 + \theta_2)}$$
+            </div>
+            <p>Multiplication <em>multiplies moduli</em> and <em>adds arguments</em>.</p>
+
+            <!-- ═══ SIM 2: Arithmetic Visualizer ═══ -->
+            <div class="sim-card">
+                <div class="sim-card-header">
+                    <h3>Arithmetic Visualizer</h3>
+                    <span class="sim-badge">Drag</span>
+                </div>
+                <div class="sim-canvas-wrap">
+                    <canvas id="arithSim" width="800" height="600" aria-label="Complex arithmetic visualizer — drag z1 and z2 to see addition and multiplication results geometrically"></canvas>
+                </div>
+                <div class="sim-readout" id="arithReadout">
+                    <div class="readout-item"><span class="readout-label">z₁ =</span><span class="readout-value" id="arithZ1">1 + 0i</span></div>
+                    <div class="readout-item"><span class="readout-label">z₂ =</span><span class="readout-value" id="arithZ2">0 + 1i</span></div>
+                    <div class="readout-item"><span class="readout-label">z₁+z₂ =</span><span class="readout-value" id="arithSum">1 + 1i</span></div>
+                    <div class="readout-item"><span class="readout-label">z₁·z₂ =</span><span class="readout-value" id="arithProd">0 + 1i</span></div>
+                </div>
+                <div class="sim-controls">
+                    <div class="control-group">
+                        <label for="arithOp">Show:</label>
+                        <select id="arithOp" aria-label="Select operation to display">
+                            <option value="both">Addition + Multiplication</option>
+                            <option value="add">Addition only</option>
+                            <option value="mul">Multiplication only</option>
+                        </select>
+                    </div>
+                    <button class="btn" id="arithReset" aria-label="Reset arithmetic visualizer">↺ Reset</button>
+                </div>
+                <details class="sim-info">
+                    <summary>ℹ What to observe</summary>
+                    <div class="info-content">
+                        <p>Drag the blue point ($z_1$) and green point ($z_2$). The orange point shows their sum
+                        (parallelogram rule) and the red point shows their product (moduli multiply, arguments add).
+                        Try placing both on the unit circle — the product stays on the unit circle!</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- ═══ §1.4 ROOTS OF UNITY ═══ -->
+            <h2>1.4 Roots of Unity</h2>
+
+            <div class="definition">
+                <p>The <strong>$n$-th roots of unity</strong> are the $n$ solutions to $z^n = 1$. They are given by
+                $$\omega_k = e^{2\pi i k / n}, \qquad k = 0, 1, \ldots, n-1$$
+                and form the vertices of a regular $n$-gon inscribed in the unit circle.</p>
+            </div>
+
+            <div class="proposition">
+                <p>The roots of unity satisfy: (1) $\omega_k^n = 1$ for all $k$;
+                (2) $\sum_{k=0}^{n-1} \omega_k = 0$; and
+                (3) $\prod_{k=0}^{n-1} \omega_k = (-1)^{n+1}$.</p>
+            </div>
+
+            <!-- ═══ SIM 3: Roots of Unity ═══ -->
+            <div class="sim-card">
+                <div class="sim-card-header">
+                    <h3>Roots of Unity</h3>
+                    <span class="sim-badge">Animated</span>
+                </div>
+                <div class="sim-canvas-wrap">
+                    <canvas id="rootsSim" width="800" height="600" aria-label="Roots of unity animation — adjust n to see the n-th roots of unity on the unit circle forming a regular polygon"></canvas>
+                </div>
+                <div class="sim-readout" id="rootsReadout">
+                    <div class="readout-item"><span class="readout-label">n =</span><span class="readout-value" id="rootsN">5</span></div>
+                    <div class="readout-item"><span class="readout-label">ω =</span><span class="readout-value" id="rootsOmega">e^(2πi/5)</span></div>
+                </div>
+                <div class="sim-controls">
+                    <button class="btn" id="rootsPlay" aria-label="Play or pause animation">▶ Play</button>
+                    <button class="btn" id="rootsReset" aria-label="Reset roots of unity">↺ Reset</button>
+                    <div class="control-group">
+                        <label for="rootsSlider">n:</label>
+                        <input type="range" id="rootsSlider" min="2" max="20" value="5" aria-label="Number of roots">
+                        <span id="rootsSliderVal" style="font-family:var(--font-code);font-size:0.82rem;color:var(--gold);min-width:24px;">5</span>
+                    </div>
+                </div>
+                <details class="sim-info">
+                    <summary>ℹ What to observe</summary>
+                    <div class="info-content">
+                        <p>Increase $n$ to see higher-order roots. All roots lie on the unit circle at equally
+                        spaced angles of $2\pi/n$. Press Play to watch the roots animate into position. When $n$ is
+                        large, the polygon approximates a circle.</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- ═══ §1.5 TOPOLOGY ═══ -->
+            <h2>1.5 Topology of the Complex Plane</h2>
+
+            <div class="definition">
+                <p>An <strong>open disk</strong> of radius $r$ centered at $z_0$ is
+                $D(z_0, r) = \{z \in \mathbb{C} : |z - z_0| < r\}$.
+                A set $U \subseteq \mathbb{C}$ is <strong>open</strong> if for every $z \in U$ there exists
+                $r > 0$ such that $D(z, r) \subseteq U$.</p>
+            </div>
+
+            <p>A set is <strong>connected</strong> if any two points can be joined by a path lying entirely
+            within the set. An open connected set is called a <strong>domain</strong>. Most of complex analysis
+            takes place on domains.</p>
+
+            <div class="theorem">
+                <p><strong>(Triangle Inequality)</strong> For any $z_1, z_2 \in \mathbb{C}$,
+                $$|z_1 + z_2| \le |z_1| + |z_2|$$
+                with equality iff $z_1$ and $z_2$ point in the same direction (i.e., $\arg z_1 = \arg z_2$).</p>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <h2>Key Takeaways</h2>
+            <div class="key-concepts">
+                <div class="key-concept">
+                    <h4>Algebra ↔ Geometry</h4>
+                    <p>Addition is vector addition (parallelogram rule); multiplication is rotation + scaling.</p>
+                </div>
+                <div class="key-concept">
+                    <h4>Euler's Formula</h4>
+                    <p>$e^{i\theta} = \cos\theta + i\sin\theta$ — the bridge between exponentials and trigonometry.</p>
+                </div>
+                <div class="key-concept">
+                    <h4>Roots of Unity</h4>
+                    <p>$z^n = 1$ has exactly $n$ solutions, equally spaced on the unit circle.</p>
+                </div>
+                <div class="key-concept">
+                    <h4>Domains</h4>
+                    <p>Complex analysis works on open connected sets — domains — in $\mathbb{C}$.</p>
+                </div>
+            </div>
+
+            <footer class="page-footer">
+                <p>Complex Analysis — Interactive Visualizations · <a href="../../LICENSE">MIT License</a> · 2026</p>
+            </footer>
+        </div>
+    </main>
+
+    <script src="../../assets/js/utils/complex-math.js"></script>
+    <script src="../../assets/js/nav.js"></script>
+
+    <!-- ═══════════════════════════════════════════════════════
+         SIMULATIONS
+         ═══════════════════════════════════════════════════════ -->
+    <script>
+    /* ──────────── Helper: coordinate transforms ──────────── */
+    function createPlane(canvas, xRange, yRange) {
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width, H = canvas.height;
+        const xMin = xRange[0], xMax = xRange[1];
+        const yMin = yRange[0], yMax = yRange[1];
+        return {
+            ctx, W, H, xMin, xMax, yMin, yMax,
+            toScreen(z) {
+                return {
+                    x: (z.re - xMin) / (xMax - xMin) * W,
+                    y: H - (z.im - yMin) / (yMax - yMin) * H
+                };
+            },
+            toComplex(sx, sy) {
+                return new Complex(
+                    xMin + (sx / W) * (xMax - xMin),
+                    yMax - (sy / H) * (yMax - yMin)
+                );
+            },
+            drawGrid() {
+                ctx.save();
+                ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+                ctx.lineWidth = 1;
+                for (let x = Math.ceil(xMin); x <= Math.floor(xMax); x++) {
+                    const sx = (x - xMin) / (xMax - xMin) * W;
+                    ctx.beginPath(); ctx.moveTo(sx, 0); ctx.lineTo(sx, H); ctx.stroke();
+                }
+                for (let y = Math.ceil(yMin); y <= Math.floor(yMax); y++) {
+                    const sy = H - (y - yMin) / (yMax - yMin) * H;
+                    ctx.beginPath(); ctx.moveTo(0, sy); ctx.lineTo(W, sy); ctx.stroke();
+                }
+                /* Axes */
+                ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+                ctx.lineWidth = 1.5;
+                const ox = (0 - xMin) / (xMax - xMin) * W;
+                const oy = H - (0 - yMin) / (yMax - yMin) * H;
+                ctx.beginPath(); ctx.moveTo(ox, 0); ctx.lineTo(ox, H); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(W, oy); ctx.stroke();
+
+                /* Labels */
+                ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                ctx.font = '11px JetBrains Mono, monospace';
+                ctx.textAlign = 'center';
+                for (let x = Math.ceil(xMin); x <= Math.floor(xMax); x++) {
+                    if (x === 0) continue;
+                    const sx = (x - xMin) / (xMax - xMin) * W;
+                    ctx.fillText(x, sx, oy + 14);
+                }
+                ctx.textAlign = 'right';
+                for (let y = Math.ceil(yMin); y <= Math.floor(yMax); y++) {
+                    if (y === 0) continue;
+                    const sy = H - (y - yMin) / (yMax - yMin) * H;
+                    ctx.fillText(y + 'i', ox - 6, sy + 4);
+                }
+                ctx.restore();
+            },
+            drawUnitCircle() {
+                ctx.save();
+                const c = this.toScreen(new Complex(0, 0));
+                const r = this.toScreen(new Complex(1, 0));
+                const radius = r.x - c.x;
+                ctx.beginPath();
+                ctx.arc(c.x, c.y, radius, 0, 2 * Math.PI);
+                ctx.strokeStyle = 'rgba(124, 108, 240, 0.25)';
+                ctx.lineWidth = 1.5;
+                ctx.setLineDash([6, 4]);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.restore();
+            },
+            drawPoint(z, color, label, radius) {
+                const p = this.toScreen(z);
+                radius = radius || 6;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, radius, 0, 2 * Math.PI);
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+                if (label) {
+                    ctx.fillStyle = color;
+                    ctx.font = '13px EB Garamond, serif';
+                    ctx.textAlign = 'left';
+                    ctx.fillText(label, p.x + radius + 4, p.y - radius);
+                }
+            },
+            drawArrow(from, to, color, width) {
+                const f = this.toScreen(from);
+                const t = this.toScreen(to);
+                const angle = Math.atan2(t.y - f.y, t.x - f.x);
+                const len = Math.sqrt((t.x - f.x) ** 2 + (t.y - f.y) ** 2);
+                if (len < 2) return;
+                ctx.save();
+                ctx.strokeStyle = color;
+                ctx.fillStyle = color;
+                ctx.lineWidth = width || 2;
+                ctx.beginPath();
+                ctx.moveTo(f.x, f.y);
+                ctx.lineTo(t.x, t.y);
+                ctx.stroke();
+                /* Arrowhead */
+                const hs = 10;
+                ctx.beginPath();
+                ctx.moveTo(t.x, t.y);
+                ctx.lineTo(t.x - hs * Math.cos(angle - 0.3), t.y - hs * Math.sin(angle - 0.3));
+                ctx.lineTo(t.x - hs * Math.cos(angle + 0.3), t.y - hs * Math.sin(angle + 0.3));
+                ctx.closePath();
+                ctx.fill();
+                ctx.restore();
+            },
+            drawArc(center, radius, startAngle, endAngle, color) {
+                const c = this.toScreen(center);
+                const p1 = this.toScreen(new Complex(center.re + radius, center.im));
+                const screenR = p1.x - c.x;
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(c.x, c.y, screenR, -endAngle, -startAngle);
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.restore();
+            },
+            clear() {
+                ctx.fillStyle = '#050510';
+                ctx.fillRect(0, 0, W, H);
+            },
+            getPointer(e) {
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = W / rect.width;
+                const scaleY = H / rect.height;
+                let cx, cy;
+                if (e.touches) {
+                    cx = (e.touches[0].clientX - rect.left) * scaleX;
+                    cy = (e.touches[0].clientY - rect.top) * scaleY;
+                } else {
+                    cx = (e.clientX - rect.left) * scaleX;
+                    cy = (e.clientY - rect.top) * scaleY;
+                }
+                return this.toComplex(cx, cy);
+            }
+        };
+    }
+
+    /* ══════════════════════ SIM 1: Complex Plane Explorer ══════════════════════ */
+    (function() {
+        const canvas = document.getElementById('planeSim');
+        const plane = createPlane(canvas, [-4, 4], [-3, 3]);
+        let z = new Complex(1.5, 1);
+        let dragging = false;
+
+        function draw() {
+            plane.clear();
+            plane.drawGrid();
+            plane.drawUnitCircle();
+
+            /* Vector from origin to z */
+            plane.drawArrow(Complex.zero(), z, 'rgba(240, 192, 64, 0.7)', 2);
+
+            /* Angle arc */
+            if (z.abs() > 0.1) {
+                plane.drawArc(Complex.zero(), Math.min(0.5, z.abs() * 0.3), 0, z.arg(), 'rgba(46, 216, 164, 0.6)');
+            }
+
+            /* Dashed projections */
+            const ctx = plane.ctx;
+            ctx.save();
+            ctx.setLineDash([4, 4]);
+            ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+            ctx.lineWidth = 1;
+            const pz = plane.toScreen(z);
+            const px = plane.toScreen(new Complex(z.re, 0));
+            const py = plane.toScreen(new Complex(0, z.im));
+            ctx.beginPath(); ctx.moveTo(pz.x, pz.y); ctx.lineTo(px.x, px.y); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(pz.x, pz.y); ctx.lineTo(py.x, py.y); ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.restore();
+
+            /* Point */
+            plane.drawPoint(z, '#f0c040', 'z', 7);
+
+            /* Readout */
+            document.getElementById('planeZ').textContent = z.toString(2);
+            document.getElementById('planeMod').textContent = z.abs().toFixed(3);
+            document.getElementById('planeArg').textContent = z.arg().toFixed(3) + ' rad';
+            const p = z.toPolar(2);
+            document.getElementById('planePolar').textContent = `${p.r}·e^(${p.theta}i)`;
+        }
+
+        function onPointer(e) {
+            e.preventDefault();
+            z = plane.getPointer(e);
+            draw();
+        }
+
+        canvas.addEventListener('pointerdown', e => { dragging = true; onPointer(e); });
+        canvas.addEventListener('pointermove', e => { if (dragging) onPointer(e); });
+        canvas.addEventListener('pointerup', () => { dragging = false; });
+        canvas.addEventListener('pointerleave', () => { dragging = false; });
+
+        document.getElementById('planeReset').addEventListener('click', () => {
+            z = new Complex(1.5, 1);
+            draw();
+        });
+
+        /* Keyboard */
+        canvas.setAttribute('tabindex', '0');
+        canvas.addEventListener('keydown', e => {
+            const step = 0.1;
+            if (e.key === 'ArrowRight') z = z.add(new Complex(step, 0));
+            else if (e.key === 'ArrowLeft') z = z.add(new Complex(-step, 0));
+            else if (e.key === 'ArrowUp') z = z.add(new Complex(0, step));
+            else if (e.key === 'ArrowDown') z = z.add(new Complex(0, -step));
+            else return;
+            e.preventDefault();
+            draw();
+        });
+
+        draw();
+    })();
+
+    /* ══════════════════════ SIM 2: Arithmetic Visualizer ══════════════════════ */
+    (function() {
+        const canvas = document.getElementById('arithSim');
+        const plane = createPlane(canvas, [-4, 4], [-3, 3]);
+        let z1 = new Complex(1.5, 0.5);
+        let z2 = new Complex(-0.5, 1.2);
+        let dragged = null;
+        let mode = 'both';
+
+        function draw() {
+            plane.clear();
+            plane.drawGrid();
+            plane.drawUnitCircle();
+
+            const sum = z1.add(z2);
+            const prod = z1.mul(z2);
+            const ctx = plane.ctx;
+
+            /* Addition: parallelogram */
+            if (mode === 'both' || mode === 'add') {
+                ctx.save();
+                ctx.setLineDash([5, 5]);
+                ctx.strokeStyle = 'rgba(240, 160, 60, 0.25)';
+                ctx.lineWidth = 1;
+                const p1 = plane.toScreen(z1);
+                const p2 = plane.toScreen(z2);
+                const ps = plane.toScreen(sum);
+                ctx.beginPath();
+                ctx.moveTo(p1.x, p1.y); ctx.lineTo(ps.x, ps.y);
+                ctx.moveTo(p2.x, p2.y); ctx.lineTo(ps.x, ps.y);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.restore();
+
+                plane.drawArrow(Complex.zero(), z1, 'rgba(77, 166, 255, 0.6)', 1.5);
+                plane.drawArrow(Complex.zero(), z2, 'rgba(46, 216, 164, 0.6)', 1.5);
+                plane.drawArrow(Complex.zero(), sum, 'rgba(240, 160, 60, 0.8)', 2);
+                plane.drawPoint(sum, '#f0a03c', 'z₁+z₂', 5);
+            }
+
+            /* Multiplication */
+            if (mode === 'both' || mode === 'mul') {
+                plane.drawArrow(Complex.zero(), prod, 'rgba(233, 69, 96, 0.8)', 2);
+                plane.drawPoint(prod, '#e94560', 'z₁·z₂', 5);
+
+                /* Show angle arcs */
+                if (z1.abs() > 0.1) {
+                    plane.drawArc(Complex.zero(), 0.35, 0, z1.arg(), 'rgba(77, 166, 255, 0.4)');
+                }
+                if (z2.abs() > 0.1) {
+                    plane.drawArc(Complex.zero(), 0.5, 0, z2.arg(), 'rgba(46, 216, 164, 0.4)');
+                }
+                if (prod.abs() > 0.1) {
+                    plane.drawArc(Complex.zero(), 0.65, 0, prod.arg(), 'rgba(233, 69, 96, 0.4)');
+                }
+            }
+
+            plane.drawPoint(z1, '#4da6ff', 'z₁', 7);
+            plane.drawPoint(z2, '#2ed8a4', 'z₂', 7);
+
+            document.getElementById('arithZ1').textContent = z1.toString(2);
+            document.getElementById('arithZ2').textContent = z2.toString(2);
+            document.getElementById('arithSum').textContent = sum.toString(2);
+            document.getElementById('arithProd').textContent = prod.toString(2);
+        }
+
+        function getNearest(z) {
+            const d1 = z.dist(z1);
+            const d2 = z.dist(z2);
+            const threshold = 0.4;
+            if (d1 < d2 && d1 < threshold) return 'z1';
+            if (d2 < threshold) return 'z2';
+            return null;
+        }
+
+        canvas.addEventListener('pointerdown', e => {
+            e.preventDefault();
+            const p = plane.getPointer(e);
+            dragged = getNearest(p);
+            if (dragged === 'z1') z1 = p;
+            else if (dragged === 'z2') z2 = p;
+            draw();
+        });
+        canvas.addEventListener('pointermove', e => {
+            if (!dragged) return;
+            e.preventDefault();
+            const p = plane.getPointer(e);
+            if (dragged === 'z1') z1 = p;
+            else if (dragged === 'z2') z2 = p;
+            draw();
+        });
+        canvas.addEventListener('pointerup', () => { dragged = null; });
+        canvas.addEventListener('pointerleave', () => { dragged = null; });
+
+        document.getElementById('arithOp').addEventListener('change', e => {
+            mode = e.target.value;
+            draw();
+        });
+        document.getElementById('arithReset').addEventListener('click', () => {
+            z1 = new Complex(1.5, 0.5);
+            z2 = new Complex(-0.5, 1.2);
+            draw();
+        });
+
+        canvas.setAttribute('tabindex', '0');
+        draw();
+    })();
+
+    /* ══════════════════════ SIM 3: Roots of Unity ══════════════════════ */
+    (function() {
+        const canvas = document.getElementById('rootsSim');
+        const plane = createPlane(canvas, [-2, 2], [-1.5, 1.5]);
+        let n = 5;
+        let animProgress = 1;
+        let playing = false;
+        let lastTime = 0;
+        let rotation = 0;
+        let animId;
+
+        const slider = document.getElementById('rootsSlider');
+        const sliderVal = document.getElementById('rootsSliderVal');
+        const playBtn = document.getElementById('rootsPlay');
+
+        function draw(timestamp) {
+            const dt = lastTime ? (timestamp - lastTime) / 1000 : 0;
+            lastTime = timestamp;
+
+            if (playing) {
+                rotation += dt * 0.5;
+                animProgress = Math.min(1, animProgress + dt * 0.8);
+            }
+
+            plane.clear();
+            plane.drawGrid();
+            plane.drawUnitCircle();
+
+            const ctx = plane.ctx;
+            const roots = [];
+            const shown = Math.floor(animProgress * n);
+
+            for (let k = 0; k < n; k++) {
+                const angle = (2 * Math.PI * k) / n + rotation;
+                roots.push(Complex.fromPolar(1, angle));
+            }
+
+            /* Draw polygon */
+            if (shown >= 2) {
+                ctx.save();
+                ctx.beginPath();
+                for (let k = 0; k <= Math.min(shown, n); k++) {
+                    const p = plane.toScreen(roots[k % n]);
+                    if (k === 0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y);
+                }
+                if (shown >= n) ctx.closePath();
+                ctx.strokeStyle = 'rgba(124, 108, 240, 0.5)';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                /* Fill */
+                if (shown >= n) {
+                    ctx.fillStyle = 'rgba(124, 108, 240, 0.08)';
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+
+            /* Draw roots */
+            const colors = ['#f0c040', '#4da6ff', '#2ed8a4', '#e94560', '#a89cff',
+                            '#ff9f43', '#ee5a24', '#0abde3', '#10ac84', '#f368e0'];
+            for (let k = 0; k < Math.min(shown + 1, n); k++) {
+                const color = colors[k % colors.length];
+                const label = 'ω' + (k > 0 ? String.fromCharCode(8320 + k) : '₀');
+                plane.drawArrow(Complex.zero(), roots[k], color + '66', 1);
+                plane.drawPoint(roots[k], color, label, 6);
+            }
+
+            document.getElementById('rootsN').textContent = n;
+            document.getElementById('rootsOmega').textContent = `e^(2πi/${n})`;
+
+            if (playing) {
+                animId = requestAnimationFrame(draw);
+            }
+        }
+
+        slider.addEventListener('input', e => {
+            n = parseInt(e.target.value);
+            sliderVal.textContent = n;
+            animProgress = 0;
+            if (!playing) {
+                lastTime = 0;
+                animProgress = 1;
+                requestAnimationFrame(draw);
+            }
+        });
+
+        playBtn.addEventListener('click', () => {
+            playing = !playing;
+            playBtn.textContent = playing ? '⏸ Pause' : '▶ Play';
+            if (playing) {
+                lastTime = 0;
+                animId = requestAnimationFrame(draw);
+            } else {
+                cancelAnimationFrame(animId);
+            }
+        });
+
+        document.getElementById('rootsReset').addEventListener('click', () => {
+            playing = false;
+            playBtn.textContent = '▶ Play';
+            cancelAnimationFrame(animId);
+            n = 5;
+            slider.value = 5;
+            sliderVal.textContent = 5;
+            rotation = 0;
+            animProgress = 1;
+            lastTime = 0;
+            requestAnimationFrame(draw);
+        });
+
+        requestAnimationFrame(draw);
+    })();
+    </script>
+
+    <!-- KaTeX -->
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false},
+                {left: "\\[", right: "\\]", display: true},
+                {left: "\\(", right: "\\)", display: false}
+            ]
+        });
+    });
+    </script>
+</body>
+</html>
